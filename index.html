@@ -1,0 +1,2719 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <title>KOPO-Ulsan KPI | 한국폴리텍 울산캠퍼스 총학생회 성과·정산 시스템</title>
+  <style>
+    :root {
+      --amb-1: #0284c7;
+      --amb-2: #4f46e5;
+      --amb-3: #0d9488;
+      --amb-glow: rgba(14, 165, 233, 0.28);
+      --navy: #1B365D;
+      --navy-deep: #0F1E36;
+      --sky: #0284C7;
+      --ink: #0F172A;
+      --muted: #64748B;
+      --line: #E2E8F0;
+    }
+
+    body[data-ambient="ulsan-ocean"] {
+      --amb-1: #0284c7;
+      --amb-2: #4f46e5;
+      --amb-3: #0d9488;
+      --amb-glow: rgba(14, 165, 233, 0.28);
+    }
+    body[data-ambient="aurora-pulse"] {
+      --amb-1: #06b6d4;
+      --amb-2: #8b5cf6;
+      --amb-3: #10b981;
+      --amb-glow: rgba(139, 92, 246, 0.28);
+    }
+    body[data-ambient="sunset-gold"] {
+      --amb-1: #f59e0b;
+      --amb-2: #e11d48;
+      --amb-3: #3b82f6;
+      --amb-glow: rgba(245, 158, 11, 0.26);
+    }
+    body[data-ambient="stealth-off"] {
+      --amb-1: transparent;
+      --amb-2: transparent;
+      --amb-3: transparent;
+      --amb-glow: transparent;
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; min-height: 100%; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans KR", sans-serif;
+      background-color: #091120;
+      color: var(--ink);
+      overflow-x: hidden;
+    }
+    .hidden { display: none !important; }
+
+    /* 엠비언트 조명 배경 */
+    .ambient-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 14% 14%, rgba(27, 54, 93, 0.92) 0%, rgba(9, 17, 32, 0.98) 62%),
+        #091120;
+      overflow: hidden;
+    }
+    .ambient-orb {
+      position: absolute;
+      border-radius: 9999px;
+      filter: blur(92px);
+      opacity: 0.44;
+      will-change: transform;
+      animation: ambientDrift 18s ease-in-out infinite alternate;
+    }
+    .ambient-orb-1 { width: 520px; height: 520px; top: -140px; left: -90px; background: var(--amb-1); animation-duration: 18s; }
+    .ambient-orb-2 { width: 560px; height: 560px; bottom: -170px; right: -100px; background: var(--amb-2); animation-duration: 22s; animation-delay: -6s; }
+    .ambient-orb-3 { width: 380px; height: 380px; top: 38%; left: 46%; background: var(--amb-3); opacity: 0.24; animation-duration: 20s; animation-delay: -10s; }
+    @keyframes ambientDrift {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      50% { transform: translate3d(38px, -28px, 0) scale(1.08); }
+      100% { transform: translate3d(-24px, 34px, 0) scale(0.96); }
+    }
+
+    .content-layer { position: relative; z-index: 1; }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 16px; }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(18px) saturate(140%);
+      -webkit-backdrop-filter: blur(18px) saturate(140%);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 20px;
+      box-shadow: 0 14px 36px rgba(2, 8, 23, 0.25), 0 0 28px var(--amb-glow);
+    }
+
+    /* 로그인 화면 */
+    .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .login-card { width: 100%; max-width: 440px; padding: 28px; }
+    .login-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
+    .badge-pill {
+      display: inline-block; padding: 4px 10px; border-radius: 999px;
+      font-size: 11px; font-weight: 800; background: #EFF6FF; color: var(--navy); border: 1px solid #BFDBFE;
+    }
+    .login-title { font-size: 28px; font-weight: 900; margin: 4px 0; color: #0F172A; text-align: center; }
+    .login-sub { font-size: 13px; color: var(--muted); text-align: center; margin: 0 0 20px; }
+    .field-group { margin-bottom: 14px; }
+    .field-label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 6px; }
+    .input-box, .select-box, .textarea-box {
+      width: 100%; padding: 10px 12px; border: 1px solid #CBD5E1; border-radius: 12px;
+      font-size: 13px; background: #FFFFFF; color: #0F172A;
+    }
+    .input-box:focus, .select-box:focus, .textarea-box:focus {
+      outline: none; border-color: #0284C7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.16);
+    }
+    .pin-row { position: relative; display: flex; align-items: center; }
+    .pin-row .input-box { padding-right: 54px; }
+    .pin-toggle {
+      position: absolute; right: 10px; background: none; border: none;
+      font-size: 12px; font-weight: 700; color: var(--muted); cursor: pointer;
+    }
+    .check-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #475569; margin: 12px 0; cursor: pointer; }
+    .err-text { font-size: 12px; font-weight: 700; color: #E11D48; min-height: 18px; margin: 6px 0; }
+    .btn-primary {
+      width: 100%; padding: 12px 16px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg, #1B365D 0%, #0284C7 100%);
+      color: #FFFFFF; font-size: 14px; font-weight: 800; cursor: pointer;
+      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.28);
+    }
+    .btn-primary:hover { filter: brightness(1.06); }
+    .login-foot {
+      margin-top: 18px; padding-top: 14px; border-top: 1px solid #F1F5F9;
+      font-size: 11px; color: #94A3B8; text-align: center; line-height: 1.5;
+    }
+
+    /* 헤더 */
+    .dash-wrap { min-height: 100vh; display: flex; flex-direction: column; }
+    .top-header {
+      position: sticky; top: 0; z-index: 30;
+      background: linear-gradient(120deg, rgba(13, 27, 52, 0.94) 0%, rgba(27, 54, 93, 0.92) 55%, rgba(15, 118, 110, 0.78) 100%);
+      backdrop-filter: blur(16px); border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+      color: #FFFFFF; padding: 12px 0;
+      box-shadow: 0 10px 28px rgba(2, 8, 23, 0.35), 0 1px 22px var(--amb-glow);
+    }
+    .header-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; }
+    .brand-line { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .brand-name { font-size: 18px; font-weight: 900; letter-spacing: -0.02em; }
+    .brand-sub { font-size: 12px; color: #BAE6FD; }
+    .status-chip {
+      padding: 3px 10px; border-radius: 999px; font-size: 11px; font-weight: 800;
+      background: rgba(56, 189, 248, 0.22); color: #E0F2FE; border: 1px solid rgba(125, 211, 252, 0.45);
+    }
+    .status-chip.ok { background: rgba(16, 185, 129, 0.24); color: #D1FAE5; border-color: rgba(52, 211, 153, 0.5); }
+    .user-meta { font-size: 12px; color: #E0F2FE; margin-top: 3px; }
+    .action-bar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .room-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      background: rgba(255, 255, 255, 0.12); border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px; padding: 5px 9px; font-size: 12px;
+    }
+    .room-input {
+      background: transparent; border: none; border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+      color: #FFFFFF; font-size: 12px; font-weight: 700; width: 112px;
+    }
+    .room-input:focus { outline: none; border-bottom-color: #7DD3FC; }
+    .hdr-select {
+      background: rgba(255, 255, 255, 0.14); color: #FFFFFF; border: 1px solid rgba(255, 255, 255, 0.22);
+      border-radius: 10px; padding: 6px 9px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .hdr-select option { color: #0F172A; background: #FFFFFF; }
+    .btn-sm {
+      border: 1px solid rgba(255, 255, 255, 0.18); background: rgba(255, 255, 255, 0.14);
+      color: #FFFFFF; border-radius: 10px; padding: 6px 10px; font-size: 12px; font-weight: 700;
+      cursor: pointer; display: inline-flex; align-items: center; gap: 4px;
+    }
+    .btn-sm:hover { background: rgba(255, 255, 255, 0.24); }
+    .btn-sky { background: #38BDF8; color: #082F49; border-color: transparent; font-weight: 800; }
+    .btn-sky:hover { background: #7DD3FC; }
+    .btn-mint { background: #34D399; color: #064E3B; border-color: transparent; font-weight: 800; }
+    .btn-mint:hover { background: #6EE7B7; }
+    .btn-white { background: #FFFFFF; color: #1B365D; border-color: transparent; font-weight: 800; }
+    .btn-white:hover { background: #F0F9FF; }
+    .btn-danger { background: #E11D48; color: #FFFFFF; border-color: transparent; }
+    .btn-danger:hover { background: #F43F5E; }
+    .count-badge { background: #E11D48; color: #FFFFFF; border-radius: 999px; padding: 1px 6px; font-size: 11px; font-weight: 800; }
+
+    /* 서브 배너 */
+    .sub-banner {
+      background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.14); padding: 9px 0; font-size: 12px; color: #E0F2FE;
+    }
+    .sub-banner-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+    .link-btn { background: none; border: none; color: #FFFFFF; font-size: 12px; font-weight: 800; text-decoration: underline; cursor: pointer; padding: 0; }
+
+    /* 본문 */
+    .main-body { flex: 1; padding: 22px 0 36px; }
+    .stack-lg { display: flex; flex-direction: column; gap: 20px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+    .stat-card { padding: 18px 20px; }
+    .stat-label { font-size: 12px; font-weight: 700; color: var(--muted); }
+    .stat-val { font-size: 26px; font-weight: 900; color: #0F172A; margin-top: 4px; }
+    .stat-val.navy { color: var(--navy); }
+    .stat-val.green { color: #059669; }
+    .stat-sub { font-size: 11px; color: #94A3B8; margin-top: 4px; }
+
+    /* 히어로 KPI 그래프 섹션 */
+    .hero-chart-card { padding: 22px; }
+    .hero-chart-wrap {
+      position: relative;
+      width: 100%;
+      height: 310px;
+      background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 100%);
+      border: 1px solid #E2E8F0;
+      border-radius: 16px;
+      padding: 12px;
+      margin-top: 12px;
+    }
+    .hero-chart-wrap canvas { width: 100%; height: 100%; display: block; cursor: pointer; }
+    .chart-tooltip {
+      position: absolute;
+      pointer-events: none;
+      background: rgba(15, 23, 42, 0.94);
+      color: #FFFFFF;
+      padding: 8px 11px;
+      border-radius: 10px;
+      font-size: 12px;
+      line-height: 1.45;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+      white-space: nowrap;
+    }
+    .chart-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; font-size: 11px; color: #475569; margin-top: 10px; }
+    .legend-dot { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 4px; vertical-align: middle; }
+    .dept-mini-badges { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+    .dept-mini-badge {
+      background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 10px;
+      padding: 5px 9px; font-size: 11px; font-weight: 700; color: #334155; cursor: pointer;
+    }
+    .dept-mini-badge:hover { border-color: #0284C7; background: #F0F9FF; color: #0369A1; }
+
+    .section-card { padding: 20px; }
+    .sec-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 12px; }
+    .sec-title { font-size: 16px; font-weight: 800; margin: 0; color: #0F172A; }
+    .sec-desc { font-size: 12px; color: var(--muted); margin: 3px 0 0; }
+    .btn-navy {
+      background: var(--navy); color: #FFFFFF; border: none; border-radius: 12px;
+      padding: 9px 14px; font-size: 12px; font-weight: 800; cursor: pointer;
+    }
+    .btn-navy:hover { background: #122642; }
+    .btn-outline {
+      background: #FFFFFF; color: #334155; border: 1px solid #CBD5E1; border-radius: 12px;
+      padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+    .btn-outline:hover { background: #F8FAFC; }
+    .btn-outline-danger {
+      background: #FFF1F2; color: #BE123C; border: 1px solid #FECDD3; border-radius: 12px;
+      padding: 8px 12px; font-size: 12px; font-weight: 700; cursor: pointer;
+    }
+
+    .dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
+    .dept-btn {
+      background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px;
+      padding: 9px 10px; text-align: left; cursor: pointer; transition: all 0.15s ease;
+    }
+    .dept-btn:hover { border-color: #0284C7; background: #F0F9FF; transform: translateY(-1px); }
+    .dept-btn-role { font-size: 12px; font-weight: 800; color: #0F172A; }
+    .dept-btn-name { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    /* 탭 바 */
+    .tabs-bar { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; }
+    .tab-btn {
+      background: transparent; border: none; border-radius: 12px; padding: 10px 14px;
+      font-size: 13px; font-weight: 700; color: #475569; cursor: pointer;
+    }
+    .tab-btn:hover { background: #F1F5F9; }
+    .tab-btn.active {
+      background: linear-gradient(135deg, #1B365D 0%, #0284C7 100%);
+      color: #FFFFFF; box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
+    }
+
+    /* 필터 & 테이블 */
+    .toolbar-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
+    .filter-group { display: flex; flex-wrap: wrap; gap: 8px; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { background: #F8FAFC; color: #475569; font-weight: 800; text-align: left; padding: 11px 12px; border-bottom: 1px solid #E2E8F0; }
+    td { padding: 11px 12px; border-bottom: 1px solid #F1F5F9; vertical-align: middle; }
+    tr:hover td { background: #F8FAFC; }
+    .num-right { text-align: right; }
+    .center { text-align: center; }
+    .mini-num { width: 76px; padding: 5px 8px; border: 1px solid #CBD5E1; border-radius: 8px; text-align: right; font-size: 12px; font-weight: 700; }
+    .mini-sel { padding: 5px 8px; border: 1px solid #CBD5E1; border-radius: 8px; font-size: 12px; background: #FFFFFF; }
+    .del-link { background: none; border: none; color: #E11D48; font-size: 12px; font-weight: 700; cursor: pointer; }
+    .del-link:hover { text-decoration: underline; }
+
+    /* 폼 그리드 */
+    .form-panel { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 16px; padding: 16px; margin-bottom: 16px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+    .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+    .span-2 { grid-column: span 2; }
+    .span-3 { grid-column: span 3; }
+    @media (max-width: 720px) { .span-2, .span-3 { grid-column: span 1; } }
+
+    /* 공약 카드 */
+    .pledge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+    .pledge-item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 14px; padding: 14px; }
+    .pledge-top { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 800; color: var(--navy); }
+    .pledge-title { font-size: 14px; font-weight: 800; color: #0F172A; margin: 8px 0 10px; }
+    .range-row { display: flex; align-items: center; gap: 10px; }
+    .range-row input[type="range"] { flex: 1; }
+    .range-val { width: 44px; text-align: right; font-size: 12px; font-weight: 900; color: var(--navy); }
+
+    /* 가계부 & 카메라 */
+    .ledger-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
+    .ledger-box { border-radius: 14px; padding: 14px 16px; border: 1px solid transparent; }
+    .ledger-box.blue { background: #EFF6FF; border-color: #BFDBFE; }
+    .ledger-box.red { background: #FFF1F2; border-color: #FECDD3; }
+    .ledger-box.green { background: #ECFDF5; border-color: #A7F3D0; }
+    .cam-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 12px; }
+    .live-cam-box { background: #091120; border-radius: 14px; padding: 12px; margin-bottom: 12px; text-align: center; }
+    .live-cam-box video { width: 100%; max-height: 280px; border-radius: 10px; background: #000000; }
+    .cam-btn-bar { display: flex; justify-content: center; gap: 10px; margin-top: 10px; }
+    .preview-card {
+      display: flex; align-items: center; gap: 12px; background: #FFFFFF;
+      border: 1px solid #CBD5E1; border-radius: 12px; padding: 10px; margin-bottom: 12px;
+    }
+    .preview-card img { width: 72px; height: 72px; object-fit: cover; border-radius: 8px; }
+    .receipt-row {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      background: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 14px; padding: 12px 14px; margin-bottom: 8px;
+    }
+    .receipt-left { display: flex; align-items: center; gap: 12px; }
+    .receipt-thumb { width: 58px; height: 58px; object-fit: cover; border-radius: 8px; border: 1px solid #CBD5E1; cursor: pointer; }
+    .receipt-empty-thumb {
+      width: 58px; height: 58px; border-radius: 8px; background: #F1F5F9; color: #94A3B8;
+      font-size: 11px; display: flex; align-items: center; justify-content: center;
+    }
+
+    /* 임원 단톡방 (카톡 스타일) */
+    .chat-shell {
+      display: flex;
+      flex-direction: column;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid #CBD5E1;
+      background: #DCE8F2;
+    }
+    .chat-topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #1B365D 0%, #24477A 100%);
+      color: #FFFFFF;
+    }
+    .chat-topbar-title { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .chat-live-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(52, 211, 153, 0.22);
+      color: #A7F3D0;
+      border: 1px solid rgba(52, 211, 153, 0.45);
+    }
+    .chat-messages {
+      height: 430px;
+      overflow-y: auto;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background: linear-gradient(180deg, #C9DCF0 0%, #DAE8F5 100%);
+    }
+    .chat-empty {
+      margin: auto;
+      text-align: center;
+      color: #475569;
+      font-size: 13px;
+      background: rgba(255, 255, 255, 0.78);
+      padding: 16px 22px;
+      border-radius: 14px;
+      line-height: 1.5;
+    }
+    .chat-row {
+      display: flex;
+      align-items: flex-end;
+      gap: 8px;
+      max-width: 82%;
+    }
+    .chat-row.mine {
+      align-self: flex-end;
+      flex-direction: row-reverse;
+    }
+    .chat-row.other {
+      align-self: flex-start;
+    }
+    .chat-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      background: #1B365D;
+      color: #FFFFFF;
+      font-size: 11px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.18);
+    }
+    .chat-bubble-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .chat-row.mine .chat-bubble-wrap { align-items: flex-end; }
+    .chat-row.other .chat-bubble-wrap { align-items: flex-start; }
+    .chat-sender {
+      font-size: 11px;
+      font-weight: 800;
+      color: #1E293B;
+      padding-left: 2px;
+    }
+    .chat-bubble-line {
+      display: flex;
+      align-items: flex-end;
+      gap: 6px;
+    }
+    .chat-row.mine .chat-bubble-line { flex-direction: row-reverse; }
+    .chat-bubble {
+      padding: 10px 13px;
+      border-radius: 16px;
+      font-size: 13px;
+      line-height: 1.48;
+      white-space: pre-wrap;
+      word-break: break-word;
+      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+    }
+    .chat-row.mine .chat-bubble {
+      background: #FEE500;
+      color: #191919;
+      border-top-right-radius: 4px;
+      font-weight: 600;
+    }
+    .chat-row.other .chat-bubble {
+      background: #FFFFFF;
+      color: #0F172A;
+      border-top-left-radius: 4px;
+    }
+    .chat-meta {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 10px;
+      color: #475569;
+      white-space: nowrap;
+    }
+    .chat-del-btn {
+      background: none;
+      border: none;
+      color: #94A3B8;
+      font-size: 10px;
+      cursor: pointer;
+      padding: 0;
+      text-align: right;
+    }
+    .chat-del-btn:hover { color: #E11D48; text-decoration: underline; }
+    .chat-input-area {
+      background: #FFFFFF;
+      border-top: 1px solid #CBD5E1;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .chat-quick-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+    .chat-quick-chip {
+      background: #F1F5F9;
+      border: 1px solid #E2E8F0;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #334155;
+      cursor: pointer;
+    }
+    .chat-quick-chip:hover { background: #E0F2FE; border-color: #38BDF8; color: #0369A1; }
+    .chat-form-row {
+      display: flex;
+      gap: 8px;
+      align-items: stretch;
+    }
+    .chat-form-row input {
+      flex: 1;
+      padding: 11px 14px;
+      border: 1px solid #CBD5E1;
+      border-radius: 12px;
+      font-size: 13px;
+    }
+    .chat-form-row input:focus {
+      outline: none;
+      border-color: #0284C7;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.16);
+    }
+    .chat-send-btn {
+      background: #FEE500;
+      color: #191919;
+      border: 1px solid #EAB308;
+      border-radius: 12px;
+      padding: 0 18px;
+      font-size: 13px;
+      font-weight: 900;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .chat-send-btn:hover { background: #FACC15; }
+
+    /* 모달 & 토스트 */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 50; background: rgba(2, 8, 23, 0.7);
+      display: flex; align-items: center; justify-content: center; padding: 16px;
+    }
+    .modal-card { width: 100%; max-width: 520px; padding: 22px; max-height: 90vh; overflow-y: auto; }
+    .modal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .modal-title { font-size: 17px; font-weight: 900; margin: 0; color: #0F172A; }
+    .modal-close { background: none; border: none; font-size: 22px; color: #64748B; cursor: pointer; }
+    .modal-foot { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+    .info-box { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 12px; padding: 12px; font-size: 12px; color: #475569; margin-bottom: 12px; line-height: 1.5; }
+    .toast-box {
+      position: fixed; right: 20px; bottom: 20px; z-index: 60;
+      background: #0F172A; color: #FFFFFF; padding: 12px 16px; border-radius: 12px;
+      font-size: 12px; font-weight: 700; box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+    }
+    .toast-box.err { background: #E11D48; }
+  </style>
+</head>
+<body data-ambient="ulsan-ocean">
+
+  <!-- 엠비언트 배경 -->
+  <div class="ambient-stage" aria-hidden="true">
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
+    <div class="ambient-orb ambient-orb-3"></div>
+  </div>
+
+  <!-- 임원 로그인 게이트 -->
+  <div id="loginGate" class="content-layer login-wrap">
+    <div class="glass-card login-card">
+      <div class="login-top">
+        <span class="badge-pill">ULSAN POLYTECHNIC · STUDENT COUNCIL</span>
+        <select id="loginAmbientSelect" aria-label="엠비언트 테마 선택" class="mini-sel">
+          <option value="ulsan-ocean">🌊 오션 블루</option>
+          <option value="aurora-pulse">✨ 오로라 펄스</option>
+          <option value="sunset-gold">🌅 선셋 골드</option>
+          <option value="stealth-off">🌑 조명 끄기</option>
+        </select>
+      </div>
+
+      <h1 class="login-title">KOPO-Ulsan KPI</h1>
+      <p class="login-sub">한국폴리텍 울산캠퍼스 총학생회 임원 성과·정산 시스템</p>
+
+      <div class="field-group">
+        <label class="field-label" for="loginRoleSelect">승인된 총학생회 임원 선택 (9인 한정)</label>
+        <select id="loginRoleSelect" class="select-box">
+          <option value="">-- 직책 및 성명을 선택하세요 --</option>
+        </select>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="loginPinInput">임원 접속 비밀번호 (PIN) — 초기값: 2026</label>
+        <div class="pin-row">
+          <input id="loginPinInput" type="password" value="2026" placeholder="비밀번호 입력 (초기값: 2026)" class="input-box" />
+          <button type="button" id="togglePinBtn" class="pin-toggle">표시</button>
+        </div>
+      </div>
+
+      <label class="check-row">
+        <input id="autoLoginCheck" type="checkbox" checked />
+        <span>자동 로그인 유지 (다음 접속 시 바로 입장)</span>
+      </label>
+
+      <div id="loginErrorMsg" class="err-text"></div>
+
+      <button type="button" id="loginSubmitBtn" class="btn-primary">KOPO-Ulsan KPI 대시보드 입장하기</button>
+
+      <p class="login-foot">
+        본 시스템은 2026.11.12 업무분장표에 등록된 총학생회 회장단·대의원장 및 7개 부서장만 접근할 수 있습니다.
+      </p>
+    </div>
+  </div>
+
+  <!-- 메인 대시보드 -->
+  <div id="dashboardApp" class="content-layer dash-wrap hidden">
+    <header class="top-header">
+      <div class="container header-inner">
+        <div>
+          <div class="brand-line">
+            <span class="brand-name">KOPO-Ulsan KPI</span>
+            <span class="brand-sub">| 한국폴리텍 울산캠퍼스 총학생회</span>
+            <span id="syncBadge" class="status-chip">실시간 동기화 준비중</span>
+          </div>
+          <div class="user-meta">
+            접속 임원: <strong id="currentUserLabel">-</strong> • 업무분장 시행일: 2026. 11. 12.
+          </div>
+        </div>
+
+        <div class="action-bar">
+          <select id="ambientMoodSelect" aria-label="엠비언트 조명 테마" class="hdr-select">
+            <option value="ulsan-ocean">🌊 오션 블루</option>
+            <option value="aurora-pulse">✨ 오로라 펄스</option>
+            <option value="sunset-gold">🌅 선셋 골드</option>
+            <option value="stealth-off">🌑 조명 끄기</option>
+          </select>
+
+          <div class="room-pill">
+            <span>공유방:</span>
+            <input id="roomCodeInput" type="text" value="kopo-ulsan-2026" class="room-input" />
+          </div>
+
+          <button type="button" id="openSheetModalBtn" class="btn-sm btn-sky">구글 시트 연동</button>
+          <button type="button" id="manualSyncBtn" class="btn-sm btn-mint">즉시 동기화</button>
+          <button type="button" id="openNotifModalBtn" class="btn-sm">
+            🔔 알림·디스코드 <span id="unreadNotifCount" class="count-badge">0</span>
+          </button>
+          <button type="button" id="openKpiModalBtn" class="btn-sm btn-white">+ KPI 추가</button>
+          <button type="button" id="exportAllExcelBtn" class="btn-sm">통합 엑셀</button>
+          <button type="button" id="openPinModalBtn" class="btn-sm">비밀번호</button>
+          <button type="button" id="backupJsonBtn" class="btn-sm">백업</button>
+          <label class="btn-sm">
+            복원
+            <input id="restoreJsonInput" type="file" accept=".json" class="hidden" />
+          </label>
+          <button type="button" id="logoutBtn" class="btn-sm btn-danger">로그아웃</button>
+        </div>
+      </div>
+    </header>
+
+    <div class="sub-banner">
+      <div class="container sub-banner-inner">
+        <div>
+          <strong>📊 실시간 KPI 그래프 · 💬 임원 단톡방 · 🔔 디스코드 알림:</strong> 단톡방 대화와 KPI·영수증 변경이 자동 동기화되며, 연결된 <strong>디스코드 웹훅</strong>으로 임원 휴대폰 알림이 발송됩니다.
+        </div>
+        <div class="action-bar">
+          <button type="button" id="bannerNotifBtn" class="link-btn">🔔 디스코드 웹훅 설정</button>
+          <button type="button" id="bannerSheetBtn" class="link-btn">구글 시트 연결 설정 →</button>
+        </div>
+      </div>
+    </div>
+
+    <main class="container main-body stack-lg">
+      <!-- 요약 카드 4종 -->
+      <section class="stats-grid">
+        <div class="glass-card stat-card">
+          <div class="stat-label">전체 등록 KPI</div>
+          <div id="statTotalKpi" class="stat-val">0개</div>
+          <div class="stat-sub">회장단 + 7개 부서</div>
+        </div>
+        <div class="glass-card stat-card">
+          <div class="stat-label">전체 평균 달성률</div>
+          <div id="statAvgRate" class="stat-val navy">0.0%</div>
+          <div class="stat-sub">목표 기준선: 80% / 100%</div>
+        </div>
+        <div class="glass-card stat-card">
+          <div class="stat-label">완료된 핵심 지표</div>
+          <div id="statCompletedKpi" class="stat-val green">0개</div>
+          <div id="statInProgressKpi" class="stat-sub">진행중 0개</div>
+        </div>
+        <div class="glass-card stat-card">
+          <div class="stat-label">누적 활동 로그 / 공유업무</div>
+          <div id="statLogsAndTasks" class="stat-val">0건</div>
+          <div id="statSyncTime" class="stat-sub">로컬 저장 활성</div>
+        </div>
+      </section>
+
+      <!-- 대시보드 메인 핵심: 실시간 KPI 달성률 그래프 -->
+      <section class="glass-card hero-chart-card">
+        <div class="sec-head" style="margin-bottom: 4px;">
+          <div>
+            <h2 class="sec-title">📈 직책·부서별 KPI 실시간 달성률 그래프 (9인 업무분장 기준)</h2>
+            <p class="sec-desc">막대에 마우스를 올리면 상세 달성률과 완료 현황이 표시되며, 클릭하면 아래 KPI 대장이 해당 부서로 자동 필터링됩니다.</p>
+          </div>
+          <button type="button" id="resetChartFilterBtn" class="btn-outline">전체 부서 보기</button>
+        </div>
+
+        <div class="hero-chart-wrap" id="heroChartWrap">
+          <canvas id="heroKpiCanvas"></canvas>
+          <div id="heroChartTooltip" class="chart-tooltip hidden"></div>
+        </div>
+
+        <div class="chart-legend">
+          <span><span class="legend-dot" style="background: #0284C7;"></span>진행 달성률</span>
+          <span><span class="legend-dot" style="background: #10B981;"></span>80% 이상 우수 달성</span>
+          <span><span class="legend-dot" style="background: #F59E0B;"></span>80% 목표 기준선</span>
+          <span><span class="legend-dot" style="background: #10B981;"></span>100% 완료 기준선</span>
+        </div>
+
+        <div id="heroDeptBadges" class="dept-mini-badges"></div>
+      </section>
+
+      <!-- 메인 탭 네비게이션 -->
+      <div class="glass-card tabs-bar">
+        <button type="button" data-tab="kpi" class="tab-btn active">📋 부서별 KPI 관리대장</button>
+        <button type="button" data-tab="chat" class="tab-btn">💬 임원 단톡방 <span id="tabChatBadge">(0)</span></button>
+        <button type="button" data-tab="tasks" class="tab-btn">🤝 실시간 업무 공유 보드 <span id="tabTaskBadge">(0)</span></button>
+        <button type="button" data-tab="logs" class="tab-btn">🗓️ 월별 실적 로그 <span id="tabLogBadge">(0)</span></button>
+        <button type="button" data-tab="pledges" class="tab-btn">🎯 학생회 공약 목표 <span id="tabPledgeBadge">(0%)</span></button>
+        <button type="button" data-tab="receipts" class="tab-btn">📷 영수증·명세표 증빙 <span id="tabReceiptBadge">(0)</span></button>
+        <button type="button" data-tab="analytics" class="tab-btn">📊 부서별 달성률 차트·요약</button>
+      </div>
+
+      <!-- 탭 1: KPI 관리대장 -->
+      <section id="tab-kpi" class="tab-panel glass-card section-card">
+        <div class="toolbar-row">
+          <div class="filter-group">
+            <select id="kpiDeptFilter" class="mini-sel">
+              <option value="ALL">전체 직책 / 부서 (9개)</option>
+            </select>
+            <select id="kpiStatusFilter" class="mini-sel">
+              <option value="ALL">전체 진행 상태</option>
+              <option value="진행중">진행중</option>
+              <option value="완료">완료</option>
+              <option value="진행전">진행전</option>
+              <option value="보류">보류</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <button type="button" id="exportCsvBtn" class="btn-outline">현재 목록 CSV 저장</button>
+            <button type="button" id="resetDefaultDataBtn" class="btn-outline-danger">초기 데이터 복구</button>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>직책 / 담당자</th>
+                <th>KPI 지표명 및 측정 기준</th>
+                <th class="num-right">목표치</th>
+                <th class="num-right">현재 실적 (바로 수정)</th>
+                <th class="num-right">달성률</th>
+                <th>진행 상태</th>
+                <th>기한</th>
+                <th class="center">관리</th>
+              </tr>
+            </thead>
+            <tbody id="kpiTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 탭: 임원 단톡방 (카톡 스타일) -->
+      <section id="tab-chat" class="tab-panel hidden glass-card section-card">
+        <div class="chat-shell">
+          <div class="chat-topbar">
+            <div class="chat-topbar-title">
+              <span>💬 총학생회 임원 단톡방 (9인 전용)</span>
+              <span class="chat-live-pill">5초 자동 갱신 · 디스코드 알림 연동</span>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <button type="button" id="chatRefreshBtn" class="btn-sm">새로고침</button>
+            </div>
+          </div>
+
+          <div id="chatMessagesBox" class="chat-messages"></div>
+
+          <div class="chat-input-area">
+            <div class="chat-quick-bar">
+              <button type="button" class="chat-quick-chip" data-chat-quick="[공지] ">📢 [공지]</button>
+              <button type="button" class="chat-quick-chip" data-chat-quick="[회의] ">🗓️ [회의]</button>
+              <button type="button" class="chat-quick-chip" data-chat-quick="[긴급] ">🚨 [긴급]</button>
+              <button type="button" class="chat-quick-chip" data-chat-quick="확인했습니다! 👍">👍 확인했습니다!</button>
+              <button type="button" class="chat-quick-chip" data-chat-quick="KPI 실적 업데이트 완료했습니다.">✅ 실적 업데이트 완료</button>
+            </div>
+            <form id="chatForm" class="chat-form-row">
+              <input id="chatInput" type="text" autocomplete="off" placeholder="임원진에게 보낼 메시지를 입력하세요... (Enter 전송)" required />
+              <button type="submit" class="chat-send-btn">전송</button>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- 탭 2: 실시간 업무 공유 보드 -->
+      <section id="tab-tasks" class="tab-panel hidden glass-card section-card">
+        <div class="sec-head">
+          <div>
+            <h3 class="sec-title">새 업무 공유 / 부서 협조 요청 등록</h3>
+            <p class="sec-desc">작성한 내용은 즉시 저장되며 디스코드 웹훅이 연결된 경우 임원진에게 알림이 발송됩니다.</p>
+          </div>
+        </div>
+
+        <form id="taskForm" class="form-panel">
+          <div class="grid-4">
+            <select id="taskAuthor" required class="select-box"></select>
+            <input id="taskTarget" type="text" value="전체 임원" placeholder="수신 대상 (예: 전체 임원, 총무부)" class="input-box" />
+            <select id="taskPriority" class="select-box">
+              <option value="일반">중요도: 일반</option>
+              <option value="공지">중요도: 공지</option>
+              <option value="긴급">중요도: 긴급</option>
+            </select>
+            <input id="taskTitle" type="text" required placeholder="업무 제목 / 협조 요청 사항 *" class="input-box" />
+          </div>
+          <div class="grid-4" style="margin-top: 10px;">
+            <textarea id="taskDetail" rows="2" placeholder="세부 내용, 일정, 협조 요청 사항" class="textarea-box span-3"></textarea>
+            <button type="submit" class="btn-navy">공유 등록 + 알림</button>
+          </div>
+        </form>
+
+        <div id="taskList"></div>
+      </section>
+
+      <!-- 탭 3: 월별 실적 로그 -->
+      <section id="tab-logs" class="tab-panel hidden glass-card section-card">
+        <div class="sec-head">
+          <div>
+            <h3 class="sec-title">활동 실적 및 증빙 로그 기록</h3>
+            <p class="sec-desc">저장 시 선택한 연관 KPI 현재 실적에 가산값이 자동 합산되어 KPI 그래프에 즉시 반영됩니다.</p>
+          </div>
+        </div>
+
+        <form id="logForm" class="form-panel">
+          <div class="grid-6">
+            <input id="logDate" type="date" required class="input-box" />
+            <select id="logDept" required class="select-box"></select>
+            <input id="logTitle" type="text" required placeholder="활동 / 행사명 *" class="input-box span-2" />
+            <select id="logKpiSelect" class="select-box">
+              <option value="">연관 KPI 지표 선택 (선택 사항)</option>
+            </select>
+            <input id="logDelta" type="number" step="any" value="0" placeholder="KPI 합산치" class="input-box" />
+          </div>
+          <div class="grid-6" style="margin-top: 10px;">
+            <input id="logParticipants" type="number" min="0" value="0" placeholder="참여 인원" class="input-box" />
+            <input id="logSatisfaction" type="number" step="0.1" min="0" max="5" placeholder="만족도 (0~5)" class="input-box" />
+            <input id="logNote" type="text" placeholder="증빙 / 비고" class="input-box span-3" />
+            <button type="submit" class="btn-navy">로그 저장 + 합산</button>
+          </div>
+        </form>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>활동일자</th>
+                <th>직책 / 담당자</th>
+                <th>활동 / 행사명</th>
+                <th>연관 KPI</th>
+                <th class="num-right">참여 인원</th>
+                <th class="num-right">만족도</th>
+                <th>증빙 / 비고</th>
+                <th class="center">삭제</th>
+              </tr>
+            </thead>
+            <tbody id="logTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 탭 4: 학생회 공약 목표 -->
+      <section id="tab-pledges" class="tab-panel hidden glass-card section-card">
+        <div class="sec-head">
+          <div>
+            <h3 class="sec-title">🎯 2026 한국폴리텍 울산캠퍼스 총학생회 공약 목표 관리</h3>
+            <p class="sec-desc">핵심 공약별 세부 실행 단계와 달성률을 실시간으로 점검합니다.</p>
+          </div>
+          <div style="text-align: right;">
+            <div style="font-size: 11px; color: var(--muted);">전체 공약 평균 달성률</div>
+            <div id="pledgeAvgRate" style="font-size: 20px; font-weight: 900; color: var(--navy);">0.0%</div>
+            <div id="pledgeCountSummary" style="font-size: 11px; color: var(--muted);">완료: 0건 / 전체: 0건</div>
+          </div>
+        </div>
+
+        <form id="pledgeForm" class="form-panel">
+          <div class="grid-4">
+            <select id="pledgeDept" required class="select-box"></select>
+            <select id="pledgeField" class="select-box">
+              <option value="학생복지·시설">분야: 학생복지·시설</option>
+              <option value="취업·학술지원">분야: 취업·학술지원</option>
+              <option value="산학·현장체험">분야: 산학·현장체험</option>
+              <option value="소통·투명행정">분야: 소통·투명행정</option>
+              <option value="문화·대외교류">분야: 문화·대외교류</option>
+              <option value="봉사·지역사회">분야: 봉사·지역사회</option>
+            </select>
+            <input id="pledgeTitle" type="text" required placeholder="공약 목표명 *" class="input-box" />
+            <div style="display: flex; gap: 8px;">
+              <input id="pledgeRate" type="number" min="0" max="100" value="0" placeholder="달성률(%)" class="input-box" style="width: 84px;" />
+              <button type="submit" class="btn-navy" style="flex: 1;">공약 추가</button>
+            </div>
+          </div>
+        </form>
+
+        <div id="pledgeList" class="pledge-grid"></div>
+      </section>
+
+      <!-- 탭 5: 영수증·명세표 증빙 + 카메라 촬영 + 수입/지출 정산 -->
+      <section id="tab-receipts" class="tab-panel hidden glass-card section-card">
+        <div class="sec-head">
+          <div>
+            <h3 class="sec-title">💰 총학생회비 가계부 & 영수증·명세표 증빙</h3>
+            <p class="sec-desc">학생회비 수입과 지출 영수증(카메라 촬영/첨부)을 등록하면 잔액이 자동 정산됩니다.</p>
+          </div>
+          <button type="button" id="exportReceiptsExcelBtn" class="btn-navy">📊 가계부·영수증 보고서 엑셀(.xls)</button>
+        </div>
+
+        <div class="ledger-grid">
+          <div class="ledger-box blue">
+            <div class="stat-label">총 걷은 학생회비 (수입)</div>
+            <div id="ledgerIncomeTotal" class="stat-val navy">0원</div>
+            <div id="ledgerIncomeCount" class="stat-sub">0건</div>
+          </div>
+          <div class="ledger-box red">
+            <div class="stat-label">총 사용 금액 (영수증 지출)</div>
+            <div id="ledgerExpenseTotal" class="stat-val" style="color: #E11D48;">0원</div>
+            <div id="ledgerExpenseCount" class="stat-sub">0건</div>
+          </div>
+          <div class="ledger-box green">
+            <div class="stat-label">현재 남은 학생회비 (잔액)</div>
+            <div id="ledgerBalanceTotal" class="stat-val green">0원</div>
+            <div class="stat-sub">수입 - 지출 자동 계산</div>
+          </div>
+        </div>
+
+        <!-- 학생회비 수입 등록 -->
+        <form id="incomeForm" class="form-panel" style="background: #EFF6FF; border-color: #BFDBFE;">
+          <div style="font-size: 12px; font-weight: 800; color: #1B365D; margin-bottom: 8px;">➕ 학생회비 입금 / 이월금(수입) 등록</div>
+          <div class="grid-4">
+            <input id="incomeDate" type="date" required class="input-box" />
+            <input id="incomeTitle" type="text" required placeholder="수입 내역 (예: 2026 1학기 학생회비)" class="input-box span-2" />
+            <div style="display: flex; gap: 8px;">
+              <input id="incomeAmount" type="number" min="0" required placeholder="금액(원)" class="input-box" />
+              <button type="submit" class="btn-navy" style="white-space: nowrap;">수입 등록</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- 지출 영수증 촬영 및 등록 -->
+        <div class="form-panel">
+          <div class="cam-actions">
+            <strong style="font-size: 12px; margin-right: 6px;">📷 영수증·거래명세표 촬영 및 첨부:</strong>
+            <button type="button" id="startLiveCameraBtn" class="btn-navy">🎥 실시간 카메라 켜기</button>
+            <label class="btn-outline" style="cursor: pointer;">
+              📸 카메라 앱 촬영
+              <input id="cameraCaptureInput" type="file" accept="image/*" capture="environment" class="hidden" />
+            </label>
+            <label class="btn-outline" style="cursor: pointer;">
+              🖼️ 앨범 / 파일 선택
+              <input id="albumFileInput" type="file" accept="image/*" class="hidden" />
+            </label>
+            <button type="button" id="clearReceiptPhotoBtn" class="del-link">사진 지우기</button>
+          </div>
+
+          <div id="liveCameraBox" class="live-cam-box hidden">
+            <video id="liveCameraVideo" autoplay playsinline></video>
+            <div class="cam-btn-bar">
+              <button type="button" id="captureSnapshotBtn" class="btn-sm btn-mint">📷 지금 영수증 찍기</button>
+              <button type="button" id="stopLiveCameraBtn" class="btn-sm">카메라 끄기</button>
+            </div>
+          </div>
+
+          <div id="receiptPreviewWrap" class="preview-card hidden">
+            <img id="receiptPreviewImg" src="" alt="영수증 미리보기" />
+            <div style="font-size: 12px;">
+              <div style="font-weight: 800; color: #059669;">✅ 영수증 이미지 준비 완료</div>
+              <div id="receiptPhotoMeta" style="color: var(--muted); margin-top: 2px;">자동 압축 최적화 적용됨</div>
+            </div>
+          </div>
+
+          <form id="receiptForm" class="grid-6">
+            <input id="receiptDate" type="date" required class="input-box" />
+            <select id="receiptDept" required class="select-box"></select>
+            <select id="receiptType" class="select-box">
+              <option value="카드영수증">구분: 카드영수증</option>
+              <option value="거래명세표">구분: 거래명세표</option>
+              <option value="현금영수증">구분: 현금영수증</option>
+              <option value="세금계산서">구분: 세금계산서</option>
+              <option value="간이영수증">구분: 간이영수증</option>
+            </select>
+            <input id="receiptTitle" type="text" required placeholder="사용처 / 지출 항목명 *" class="input-box" />
+            <input id="receiptAmount" type="number" min="0" required placeholder="금액 (원) *" class="input-box" />
+            <button type="submit" class="btn-navy">영수증 등록 + 차감</button>
+          </form>
+        </div>
+
+        <div id="receiptsList"></div>
+      </section>
+
+      <!-- 탭 6: 부서별 달성률 차트·요약 & 엑셀 내보내기 -->
+      <section id="tab-analytics" class="tab-panel hidden glass-card section-card">
+        <div class="sec-head">
+          <div>
+            <h3 class="sec-title">📊 직책·부서별 KPI 달성률 상세 차트 및 엑셀 내보내기</h3>
+            <p class="sec-desc">2026.11.12 업무분장표 기준 9개 직책·부서의 성과 현황과 개별 엑셀 다운로드를 지원합니다.</p>
+          </div>
+          <button type="button" id="exportAllExcelBtn2" class="btn-navy">전체 9개 부서 시트 통합 엑셀(.xls)</button>
+        </div>
+
+        <div class="hero-chart-wrap" style="margin-bottom: 16px;">
+          <canvas id="deptChartCanvas"></canvas>
+          <div id="analyticsChartTooltip" class="chart-tooltip hidden"></div>
+        </div>
+
+        <div id="deptExcelButtons" class="dept-grid" style="margin-bottom: 16px;"></div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>직책</th>
+                <th>성명</th>
+                <th>담당 부서</th>
+                <th>지표/완료</th>
+                <th class="num-right">평균 달성률</th>
+              </tr>
+            </thead>
+            <tbody id="deptSummaryBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- 영수증 확대 모달 -->
+  <div id="receiptLightbox" class="modal-backdrop hidden">
+    <div class="glass-card modal-card">
+      <div class="modal-head">
+        <h3 id="lightboxTitle" class="modal-title">영수증 증빙 상세</h3>
+        <button type="button" id="closeLightboxBtn" class="modal-close">&times;</button>
+      </div>
+      <img id="lightboxImg" src="" alt="영수증 원본" style="width: 100%; max-height: 70vh; object-fit: contain; border-radius: 12px; background: #F1F5F9;" />
+    </div>
+  </div>
+
+  <!-- 구글 시트 연동 모달 -->
+  <div id="sheetModal" class="modal-backdrop hidden">
+    <div class="glass-card modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">구글 스프레드시트 (Apps Script) 실시간 연동</h3>
+        <button type="button" id="closeSheetModalBtn" class="modal-close">&times;</button>
+      </div>
+      <div class="info-box">
+        <div style="font-weight: 800; color: #0F172A; margin-bottom: 4px;">자동 동기화 및 공유 안내</div>
+        <div>• 기본 웹 앱 URL이 설정되어 있으며, 일반 탭에서는 <strong>15초마다</strong>, 단톡방 탭에서는 <strong>5초마다</strong> 자동 동기화됩니다.</div>
+        <div>• 모든 변경 사항은 브라우저에 즉시 저장되며, 상단 <strong>백업(.json)</strong>과 <strong>복원</strong>으로도 공유할 수 있습니다.</div>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="gasUrlInput">Google Apps Script 웹 앱 URL (/exec)</label>
+        <input id="gasUrlInput" type="url" class="input-box" />
+      </div>
+      <div class="modal-foot">
+        <button type="button" id="cancelSheetModalBtn" class="btn-outline">취소</button>
+        <button type="button" id="saveAndSyncSheetBtn" class="btn-navy">저장 및 즉시 동기화</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 알림 & 디스코드 웹훅 모달 -->
+  <div id="notifModal" class="modal-backdrop hidden">
+    <div class="glass-card modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">🔔 실시간 알림 & 디스코드 웹훅 설정</h3>
+        <button type="button" id="closeNotifModalBtn" class="modal-close">&times;</button>
+      </div>
+
+      <div class="info-box" style="background: #EEF2FF; border-color: #C7D2FE;">
+        <div style="font-weight: 800; color: #312E81; margin-bottom: 4px;">📱 임원 휴대폰 잠금화면 배너 알림 (디스코드 웹훅)</div>
+        <div>디스코드 채널 설정 → 연동 → 웹후크 URL을 아래에 1회 저장하면, 단톡방 메시지·KPI·업무공유·영수증 등록 시 임원진 휴대폰으로 즉시 알림이 발송됩니다.</div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label" for="discordWebhookInput">디스코드 웹훅 URL (https://discord.com/api/webhooks/...)</label>
+        <div style="display: flex; gap: 8px;">
+          <input id="discordWebhookInput" type="url" placeholder="https://discord.com/api/webhooks/..." class="input-box" />
+          <button type="button" id="saveWebhookBtn" class="btn-navy" style="white-space: nowrap;">웹훅 저장</button>
+        </div>
+      </div>
+
+      <div style="font-size: 12px; font-weight: 800; color: #334155; margin: 14px 0 8px;">최근 활동 알림 피드</div>
+      <div id="notifFeedList" style="max-height: 260px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; font-size: 12px;"></div>
+
+      <div class="modal-foot" style="justify-content: space-between;">
+        <button type="button" id="markAllReadBtn" class="link-btn" style="color: var(--navy);">모두 읽음 처리</button>
+        <button type="button" id="closeNotifModalBtn2" class="btn-navy">닫기</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 추가 모달 -->
+  <div id="kpiModal" class="modal-backdrop hidden">
+    <div class="glass-card modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">새 KPI 지표 추가</h3>
+        <button type="button" id="closeKpiModalBtn" class="modal-close">&times;</button>
+      </div>
+      <form id="kpiCreateForm">
+        <div class="grid-4">
+          <div class="field-group span-2">
+            <label class="field-label" for="newKpiDept">대상 직책 / 부서 *</label>
+            <select id="newKpiDept" required class="select-box"></select>
+          </div>
+          <div class="field-group span-2">
+            <label class="field-label" for="newKpiStatus">진행 상태</label>
+            <select id="newKpiStatus" class="select-box">
+              <option value="진행전">진행전</option>
+              <option value="진행중" selected>진행중</option>
+              <option value="완료">완료</option>
+              <option value="보류">보류</option>
+            </select>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="newKpiTitle">KPI 성과 지표명 *</label>
+          <input id="newKpiTitle" type="text" required placeholder="예: 학생복지 건의사항 처리율" class="input-box" />
+        </div>
+        <div class="grid-4">
+          <div class="field-group">
+            <label class="field-label" for="newKpiUnit">단위 *</label>
+            <input id="newKpiUnit" type="text" required value="건" class="input-box" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="newKpiTarget">목표치 *</label>
+            <input id="newKpiTarget" type="number" step="any" required value="10" class="input-box" />
+          </div>
+          <div class="field-group span-2">
+            <label class="field-label" for="newKpiCurrent">현재 실적 *</label>
+            <input id="newKpiCurrent" type="number" step="any" required value="0" class="input-box" />
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label" for="newKpiDue">목표 기한</label>
+          <input id="newKpiDue" type="date" class="input-box" />
+        </div>
+        <div class="modal-foot">
+          <button type="button" id="cancelKpiModalBtn" class="btn-outline">취소</button>
+          <button type="submit" class="btn-navy">저장 및 동기화</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- 비밀번호 변경 모달 -->
+  <div id="pinModal" class="modal-backdrop hidden">
+    <div class="glass-card modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">임원 비밀번호(PIN) 변경</h3>
+        <button type="button" id="closePinModalBtn" class="modal-close">&times;</button>
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="newPinInput">새 비밀번호 (4자리 이상 권장)</label>
+        <input id="newPinInput" type="password" class="input-box" />
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="confirmPinInput">새 비밀번호 확인</label>
+        <input id="confirmPinInput" type="password" class="input-box" />
+      </div>
+      <div class="modal-foot">
+        <button type="button" id="cancelPinModalBtn" class="btn-outline">취소</button>
+        <button type="button" id="savePinBtn" class="btn-navy">비밀번호 저장</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toastBox" class="toast-box hidden"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      const DEFAULT_GAS_URL = 'https://script.google.com/macros/s/AKfycbyfK7Y_f19iNPY8a90BomwPvjyZhXTv1NBA4VKPd7zbpQaSzGa4pRDkpHgZYn6wBBc2/exec';
+      const DEFAULT_ROOM = 'kopo-ulsan-2026';
+      const DEFAULT_AMBIENT = 'ulsan-ocean';
+      const STORAGE_KEY = 'kopo_ulsan_kpi_state_v6';
+      const AUTH_KEY = 'kopo_ulsan_kpi_auth_v6';
+      const GAS_URL_KEY = 'kopo_ulsan_gas_url_v6';
+      const ROOM_KEY = 'kopo_ulsan_room_v6';
+      const AMBIENT_KEY = 'kopo_ulsan_ambient_v6';
+
+      const OFFICERS = [
+        { id: 'president', role: '학생회장', name: '정우성', dept: '회장단', major: '총학생회' },
+        { id: 'vp', role: '부회장', name: '정민규', dept: '회장단', major: '총학생회' },
+        { id: 'speaker', role: '대의원장', name: '박선민', dept: '대의원회', major: '에너지산업설비과' },
+        { id: 'academic', role: '학술부장', name: '안태양', dept: '학술부', major: '전기과' },
+        { id: 'culture', role: '문화부장', name: '홍예섭', dept: '문화부', major: '에너지산업설비과' },
+        { id: 'industry', role: '산학협력부장', name: '정우진', dept: '산학협력부', major: '에너지산업설비과' },
+        { id: 'finance', role: '총무부장', name: '김준우', dept: '총무부', major: '기계과' },
+        { id: 'pr', role: '홍보소통부장', name: '남주현', dept: '홍보소통부', major: '에너지산업설비과' },
+        { id: 'service', role: '봉사부장', name: '정호준', dept: '봉사부', major: '에너지산업설비과' }
+      ];
+
+      function escapeHtml(str) {
+        return String(str == null ? '' : str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function applyAmbientTheme(themeName) {
+        const valid = ['ulsan-ocean', 'aurora-pulse', 'sunset-gold', 'stealth-off'];
+        const chosen = valid.indexOf(themeName) >= 0 ? themeName : DEFAULT_AMBIENT;
+        document.body.setAttribute('data-ambient', chosen);
+        try { localStorage.setItem(AMBIENT_KEY, chosen); } catch (e) {}
+        const dSel = document.getElementById('ambientMoodSelect');
+        const lSel = document.getElementById('loginAmbientSelect');
+        if (dSel && dSel.value !== chosen) dSel.value = chosen;
+        if (lSel && lSel.value !== chosen) lSel.value = chosen;
+      }
+
+      function createDefaultState() {
+        return {
+          updatedAt: new Date().toISOString(),
+          pins: { defaultPin: '2026', custom: {} },
+          notifyConfig: { webhookUrl: '' },
+          kpis: [
+            { id: 'k1', dept: '회장단', owner: '정우성 · 학생회장', title: '임원진 주례회의 개최', unit: '회', target: 20, current: 16, status: '진행중', due: '2026-12-18' },
+            { id: 'k2', dept: '회장단', owner: '정민규 · 부회장', title: '학생 건의사항 수렴 및 피드백', unit: '건', target: 30, current: 22, status: '진행중', due: '2026-12-18' },
+            { id: 'k3', dept: '대의원회', owner: '박선민 · 대의원장', title: '대의원 정기총회 및 안건 심의', unit: '회', target: 6, current: 5, status: '진행중', due: '2026-12-15' },
+            { id: 'k4', dept: '학술부', owner: '안태양 · 학술부장', title: '전공 스터디·자격증 특강 운영', unit: '회', target: 8, current: 5, status: '진행중', due: '2026-12-10' },
+            { id: 'k5', dept: '문화부', owner: '홍예섭 · 문화부장', title: '캠퍼스 문화행사·동아리 교류 기획', unit: '회', target: 5, current: 4, status: '진행중', due: '2026-12-12' },
+            { id: 'k6', dept: '산학협력부', owner: '정우진 · 산학협력부장', title: '현장견학·산업체 연계 프로그램 추진', unit: '건', target: 6, current: 5, status: '진행중', due: '2026-12-14' },
+            { id: 'k7', dept: '총무부', owner: '김준우 · 총무부장', title: '학생회비 결산 및 증빙 투명 공개', unit: '회', target: 4, current: 4, status: '완료', due: '2026-12-20' },
+            { id: 'k8', dept: '홍보소통부', owner: '남주현 · 홍보소통부장', title: '총학생회 카드뉴스·공지 콘텐츠 발행', unit: '건', target: 24, current: 18, status: '진행중', due: '2026-12-20' },
+            { id: 'k9', dept: '봉사부', owner: '정호준 · 봉사부장', title: '울산 지역사회 봉사활동 추진', unit: '회', target: 6, current: 4, status: '진행중', due: '2026-12-16' }
+          ],
+          chats: [],
+          tasks: [],
+          logs: [],
+          pledges: [
+            { id: 'p1', dept: '회장단', field: '소통·투명행정', title: '학생회비 집행내역 및 영수증 상시 공개', rate: 80 },
+            { id: 'p2', dept: '학술부', field: '취업·학술지원', title: '실무 자격증 대비 멘토링 및 학습 지원 확대', rate: 65 },
+            { id: 'p3', dept: '산학협력부', field: '산학·현장체험', title: '울산 산업현장 탐방 및 진로 연계 프로그램 운영', rate: 70 },
+            { id: 'p4', dept: '봉사부', field: '봉사·지역사회', title: '지역사회 연계 재능기부·환경정화 봉사 정례화', rate: 60 }
+          ],
+          incomes: [],
+          receipts: [],
+          notifications: []
+        };
+      }
+
+      let state = loadLocalState();
+      let currentUser = null;
+      let pendingReceiptPhoto = '';
+      let cameraStream = null;
+      let autoSyncTimer = null;
+      let isSyncing = false;
+      let chartHitAreas = { hero: [], analytics: [] };
+
+      function loadLocalState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return createDefaultState();
+          const parsed = JSON.parse(raw);
+          const def = createDefaultState();
+          return Object.assign({}, def, parsed, {
+            pins: Object.assign({}, def.pins, parsed.pins || {}),
+            notifyConfig: Object.assign({}, def.notifyConfig, parsed.notifyConfig || {}),
+            kpis: Array.isArray(parsed.kpis) ? parsed.kpis : def.kpis,
+            chats: Array.isArray(parsed.chats) ? parsed.chats : [],
+            tasks: Array.isArray(parsed.tasks) ? parsed.tasks : [],
+            logs: Array.isArray(parsed.logs) ? parsed.logs : [],
+            pledges: Array.isArray(parsed.pledges) ? parsed.pledges : def.pledges,
+            incomes: Array.isArray(parsed.incomes) ? parsed.incomes : [],
+            receipts: Array.isArray(parsed.receipts) ? parsed.receipts : [],
+            notifications: Array.isArray(parsed.notifications) ? parsed.notifications : []
+          });
+        } catch (e) {
+          return createDefaultState();
+        }
+      }
+
+      function saveLocalState() {
+        state.updatedAt = new Date().toISOString();
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+      }
+
+      function getGasUrl() {
+        const saved = (localStorage.getItem(GAS_URL_KEY) || '').trim();
+        return saved || DEFAULT_GAS_URL;
+      }
+
+      function setGasUrl(url) {
+        const cleaned = (url || '').trim();
+        if (cleaned) localStorage.setItem(GAS_URL_KEY, cleaned);
+        else localStorage.removeItem(GAS_URL_KEY);
+      }
+
+      function getRoomCode() {
+        const inputEl = document.getElementById('roomCodeInput');
+        const fromInput = inputEl ? inputEl.value.trim() : '';
+        const saved = (localStorage.getItem(ROOM_KEY) || '').trim();
+        const finalRoom = fromInput || saved || DEFAULT_ROOM;
+        localStorage.setItem(ROOM_KEY, finalRoom);
+        if (inputEl && inputEl.value !== finalRoom) inputEl.value = finalRoom;
+        return finalRoom;
+      }
+
+      function showToast(msg, isError) {
+        const box = document.getElementById('toastBox');
+        if (!box) return;
+        box.textContent = msg;
+        box.className = 'toast-box' + (isError ? ' err' : '');
+        clearTimeout(showToast._timer);
+        showToast._timer = setTimeout(function () { box.classList.add('hidden'); }, 3200);
+      }
+
+      function setSyncBadge(text, isOk) {
+        const badge = document.getElementById('syncBadge');
+        if (!badge) return;
+        badge.textContent = text;
+        badge.className = 'status-chip' + (isOk ? ' ok' : '');
+      }
+
+      function addNotification(category, title, detail) {
+        const actor = currentUser ? (currentUser.role + ' ' + currentUser.name) : '시스템';
+        const nowStr = new Date().toLocaleString('ko-KR');
+        const item = {
+          id: 'n_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
+          category: category,
+          title: title,
+          detail: detail || '',
+          actor: actor,
+          time: nowStr,
+          read: false
+        };
+        state.notifications.unshift(item);
+        if (state.notifications.length > 50) state.notifications.length = 50;
+        return item;
+      }
+
+      function isChatTabActive() {
+        const el = document.getElementById('tab-chat');
+        return !!(el && !el.classList.contains('hidden'));
+      }
+
+      function isUserBusyEditing() {
+        const active = document.activeElement;
+        if (active && active.id === 'chatInput') {
+          return false;
+        }
+        if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT')) {
+          return true;
+        }
+        const modalIds = ['receiptLightbox', 'sheetModal', 'notifModal', 'kpiModal', 'pinModal'];
+        for (let i = 0; i < modalIds.length; i++) {
+          const el = document.getElementById(modalIds[i]);
+          if (el && !el.classList.contains('hidden')) return true;
+        }
+        return false;
+      }
+
+      function pullFromCloudJsonp() {
+        return new Promise(function (resolve, reject) {
+          const url = getGasUrl();
+          if (!url) { reject(new Error('URL 없음')); return; }
+          const room = encodeURIComponent(getRoomCode());
+          const cbName = 'kopoGasCb_' + Date.now() + '_' + Math.floor(Math.random() * 100000);
+          const script = document.createElement('script');
+          let done = false;
+
+          const timer = setTimeout(function () {
+            if (done) return;
+            done = true;
+            cleanup();
+            reject(new Error('응답 시간 초과'));
+          }, 7000);
+
+          function cleanup() {
+            clearTimeout(timer);
+            try { delete window[cbName]; } catch (e) { window[cbName] = undefined; }
+            if (script && script.parentNode) script.parentNode.removeChild(script);
+          }
+
+          window[cbName] = function (data) {
+            if (done) return;
+            done = true;
+            cleanup();
+            resolve(data);
+          };
+
+          script.onerror = function () {
+            if (done) return;
+            done = true;
+            cleanup();
+            reject(new Error('스크립트 차단됨'));
+          };
+
+          const sep = url.indexOf('?') === -1 ? '?' : '&';
+          script.src = url + sep + 'room=' + room + '&callback=' + cbName + '&_t=' + Date.now();
+          document.body.appendChild(script);
+        });
+      }
+
+      async function pushToCloudNoCors(lastEvent) {
+        const url = getGasUrl();
+        if (!url) return;
+        const room = encodeURIComponent(getRoomCode());
+        const payload = Object.assign({}, state, {
+          updatedAt: new Date().toISOString(),
+          lastEvent: lastEvent || null,
+          notifyConfig: state.notifyConfig || { webhookUrl: '' }
+        });
+        const sep = url.indexOf('?') === -1 ? '?' : '&';
+        await fetch(url + sep + 'room=' + room, {
+          method: 'POST',
+          mode: 'no-cors',
+          credentials: 'omit',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(payload)
+        });
+      }
+
+      async function syncNow(lastEvent, isSilentAuto) {
+        if (isSyncing) return;
+        isSyncing = true;
+        if (!isSilentAuto) {
+          saveLocalState();
+          renderAll();
+        }
+        const nowLabel = new Date().toLocaleTimeString('ko-KR');
+        const syncTimeEl = document.getElementById('statSyncTime');
+
+        try {
+          if (lastEvent) {
+            await pushToCloudNoCors(lastEvent);
+          }
+          const remote = await pullFromCloudJsonp();
+          if (remote && remote.status !== 'empty' && remote.status !== 'error' && Array.isArray(remote.kpis)) {
+            const localTime = Date.parse(state.updatedAt || 0) || 0;
+            const remoteTime = Date.parse(remote.updatedAt || 0) || 0;
+            if (remoteTime > localTime || (!lastEvent && !isSilentAuto)) {
+              const def = createDefaultState();
+              state = Object.assign({}, def, remote, {
+                pins: Object.assign({}, def.pins, remote.pins || {}),
+                notifyConfig: Object.assign({}, def.notifyConfig, remote.notifyConfig || {}),
+                kpis: Array.isArray(remote.kpis) ? remote.kpis : def.kpis,
+                chats: Array.isArray(remote.chats) ? remote.chats : [],
+                tasks: Array.isArray(remote.tasks) ? remote.tasks : [],
+                logs: Array.isArray(remote.logs) ? remote.logs : [],
+                pledges: Array.isArray(remote.pledges) ? remote.pledges : def.pledges,
+                incomes: Array.isArray(remote.incomes) ? remote.incomes : [],
+                receipts: Array.isArray(remote.receipts) ? remote.receipts : [],
+                notifications: Array.isArray(remote.notifications) ? remote.notifications : []
+              });
+              saveLocalState();
+              renderAll();
+            }
+          }
+          setSyncBadge(isChatTabActive() ? '실시간 연결됨 (단톡 5초 자동)' : '실시간 연결됨 (15초 자동)', true);
+          if (syncTimeEl) syncTimeEl.textContent = '시트 동기화 · ' + nowLabel;
+          if (!isSilentAuto) showToast('저장 및 동기화가 완료되었습니다.');
+        } catch (err) {
+          setSyncBadge('로컬 저장됨 · 백업/복원 지원', false);
+          if (syncTimeEl) syncTimeEl.textContent = '로컬 저장됨 · ' + nowLabel;
+          if (!isSilentAuto) showToast('브라우저에 안전하게 저장되었습니다. [백업]으로 임원 간 공유도 가능합니다.');
+        } finally {
+          isSyncing = false;
+        }
+      }
+
+      function startAutoSyncLoop() {
+        stopAutoSyncLoop();
+        let tickCount = 0;
+        autoSyncTimer = setInterval(function () {
+          if (!currentUser || document.hidden || isUserBusyEditing()) return;
+          tickCount++;
+          if (isChatTabActive() || tickCount % 3 === 0) {
+            syncNow(null, true);
+          }
+        }, 5000);
+      }
+
+      function stopAutoSyncLoop() {
+        if (autoSyncTimer) {
+          clearInterval(autoSyncTimer);
+          autoSyncTimer = null;
+        }
+      }
+
+      function downloadExcelXml(sheetsArr, filename) {
+        const xmlSheets = sheetsArr.map(function (sh) {
+          const safeSheetName = String(sh.name || 'Sheet1').replace(/[\\/?*[\]:]/g, '').slice(0, 31) || 'Sheet1';
+          const rowsXml = (sh.rows || []).map(function (row) {
+            const cellsXml = row.map(function (val) {
+              const isNum = typeof val === 'number' && !isNaN(val);
+              const tAttr = isNum ? 'Number' : 'String';
+              return '<Cell><Data ss:Type="' + tAttr + '">' + escapeHtml(val) + '</Data></Cell>';
+            }).join('');
+            return '<Row>' + cellsXml + '</Row>';
+          }).join('');
+          return '<Worksheet ss:Name="' + escapeHtml(safeSheetName) + '"><Table>' + rowsXml + '</Table></Worksheet>';
+        }).join('');
+
+        const fullXml =
+          '<?xml version="1.0" encoding="UTF-8"?>' +
+          '<?mso-application progid="Excel.Sheet"?>' +
+          '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" ' +
+          'xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">' +
+          xmlSheets +
+          '</Workbook>';
+
+        const blob = new Blob([fullXml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = filename;
+        a.click();
+      }
+
+      function exportDeptExcel(targetDept) {
+        const depts = targetDept ? [targetDept] : OFFICERS.map(function (o) { return o.dept; });
+        const uniqueDepts = depts.filter(function (v, idx, arr) { return arr.indexOf(v) === idx; });
+        const sheets = uniqueDepts.map(function (d) {
+          const header = ['부서', '담당자', '지표명', '현재실적', '목표치', '단위', '달성률(%)', '상태', '기한'];
+          const matched = (state.kpis || []).filter(function (k) { return k.dept === d; });
+          const body = matched.length
+            ? matched.map(function (k) {
+                return [
+                  k.dept, k.owner, k.title,
+                  Number(k.current) || 0, Number(k.target) || 0, k.unit,
+                  Number(calcRate(k.current, k.target).toFixed(1)), k.status, k.due || ''
+                ];
+              })
+            : [[d, '', '등록된 KPI가 없습니다.', 0, 0, '', 0, '', '']];
+          return { name: d, rows: [header].concat(body) };
+        });
+
+        const fileName = targetDept ? ('KOPO_Ulsan_' + targetDept + '_KPI.xls') : 'KOPO_Ulsan_총학생회_전체KPI.xls';
+        downloadExcelXml(sheets, fileName);
+      }
+
+      function compressImageFile(fileOrBlob, maxWidth, quality) {
+        return new Promise(function (resolve, reject) {
+          const reader = new FileReader();
+          reader.onload = function (ev) {
+            const img = new Image();
+            img.onload = function () {
+              const w = img.width;
+              const h = img.height;
+              const ratio = w > maxWidth ? (maxWidth / w) : 1;
+              const canvas = document.createElement('canvas');
+              canvas.width = Math.round(w * ratio);
+              canvas.height = Math.round(h * ratio);
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              resolve(canvas.toDataURL('image/jpeg', quality || 0.72));
+            };
+            img.onerror = reject;
+            img.src = ev.target.result;
+          };
+          reader.onerror = reject;
+          reader.readAsDataURL(fileOrBlob);
+        });
+      }
+
+      function setPendingReceiptPhoto(dataUrl, labelText) {
+        pendingReceiptPhoto = dataUrl || '';
+        const wrap = document.getElementById('receiptPreviewWrap');
+        const img = document.getElementById('receiptPreviewImg');
+        const meta = document.getElementById('receiptPhotoMeta');
+        if (!pendingReceiptPhoto) {
+          wrap.classList.add('hidden');
+          img.src = '';
+          return;
+        }
+        img.src = pendingReceiptPhoto;
+        const approxKb = Math.round((pendingReceiptPhoto.length * 3) / 4 / 1024);
+        meta.textContent = (labelText || '영수증 사진') + ' · 약 ' + approxKb + 'KB';
+        wrap.classList.remove('hidden');
+      }
+
+      async function startLiveCamera() {
+        const box = document.getElementById('liveCameraBox');
+        const video = document.getElementById('liveCameraVideo');
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          showToast('이 브라우저에서는 실시간 카메라 스트림을 지원하지 않습니다. [카메라 앱 촬영] 버튼을 눌러 주세요.', true);
+          return;
+        }
+        try {
+          stopLiveCamera();
+          cameraStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: { ideal: 'environment' } },
+            audio: false
+          });
+          video.srcObject = cameraStream;
+          box.classList.remove('hidden');
+        } catch (err) {
+          showToast('카메라 권한이 거부되었거나 장치를 찾을 수 없습니다. [카메라 앱 촬영] 버튼을 사용해 주세요.', true);
+        }
+      }
+
+      function stopLiveCamera() {
+        const box = document.getElementById('liveCameraBox');
+        const video = document.getElementById('liveCameraVideo');
+        if (cameraStream) {
+          cameraStream.getTracks().forEach(function (t) { t.stop(); });
+          cameraStream = null;
+        }
+        if (video) video.srcObject = null;
+        if (box) box.classList.add('hidden');
+      }
+
+      function captureLiveSnapshot() {
+        const video = document.getElementById('liveCameraVideo');
+        if (!video || !video.videoWidth) return;
+        const canvas = document.createElement('canvas');
+        const ratio = video.videoWidth > 1024 ? (1024 / video.videoWidth) : 1;
+        canvas.width = Math.round(video.videoWidth * ratio);
+        canvas.height = Math.round(video.videoHeight * ratio);
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.75);
+        setPendingReceiptPhoto(dataUrl, '실시간 촬영 사진');
+        stopLiveCamera();
+        showToast('영수증 사진이 촬영되었습니다.');
+      }
+
+      function calcRate(current, target) {
+        const t = Number(target) || 0;
+        const c = Number(current) || 0;
+        if (t <= 0) return c > 0 ? 100 : 0;
+        return Math.min(999, Math.max(0, (c / t) * 100));
+      }
+
+      function computeOfficerMetrics() {
+        return OFFICERS.map(function (o) {
+          const matched = (state.kpis || []).filter(function (k) { return k.dept === o.dept; });
+          const done = matched.filter(function (k) { return k.status === '완료'; }).length;
+          const avg = matched.length > 0
+            ? matched.reduce(function (a, k) { return a + Math.min(100, calcRate(k.current, k.target)); }, 0) / matched.length
+            : 0;
+          return {
+            officer: o,
+            total: matched.length,
+            done: done,
+            rate: Number(avg.toFixed(1))
+          };
+        });
+      }
+
+      function drawKpiBarChart(canvasId, hitKey, metrics) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const rect = canvas.getBoundingClientRect();
+        const width = Math.max(320, Math.floor(rect.width || 680));
+        const height = Math.max(220, Math.floor(rect.height || 280));
+        const dpr = window.devicePixelRatio || 1;
+        canvas.width = width * dpr;
+        canvas.height = height * dpr;
+
+        const ctx = canvas.getContext('2d');
+        ctx.scale(dpr, dpr);
+        ctx.clearRect(0, 0, width, height);
+
+        const padTop = 30, padRight = 20, padBottom = 44, padLeft = 46;
+        const plotW = Math.max(100, width - padLeft - padRight);
+        const plotH = Math.max(80, height - padTop - padBottom);
+
+        ctx.font = '11px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        [0, 25, 50, 75, 100].forEach(function (tick) {
+          const y = padTop + plotH - (tick / 100) * plotH;
+          ctx.strokeStyle = tick === 100 ? 'rgba(16, 185, 129, 0.55)' : '#E2E8F0';
+          ctx.lineWidth = tick === 100 ? 1.5 : 1;
+          ctx.setLineDash(tick === 100 ? [5, 4] : []);
+          ctx.beginPath();
+          ctx.moveTo(padLeft, y);
+          ctx.lineTo(padLeft + plotW, y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+          ctx.fillStyle = tick === 100 ? '#059669' : '#64748B';
+          ctx.fillText(tick + '%', padLeft - 8, y);
+        });
+
+        const y80 = padTop + plotH - 0.8 * plotH;
+        ctx.strokeStyle = 'rgba(245, 158, 11, 0.75)';
+        ctx.lineWidth = 1.5;
+        ctx.setLineDash([6, 4]);
+        ctx.beginPath();
+        ctx.moveTo(padLeft, y80);
+        ctx.lineTo(padLeft + plotW, y80);
+        ctx.stroke();
+        ctx.setLineDash([]);
+        ctx.fillStyle = '#D97706';
+        ctx.font = 'bold 10px sans-serif';
+        ctx.textAlign = 'right';
+        ctx.fillText('목표 80%', padLeft + plotW, y80 - 8);
+
+        const count = metrics.length || 1;
+        const slotW = plotW / count;
+        const barW = Math.min(40, Math.max(14, slotW * 0.54));
+        const hits = [];
+
+        metrics.forEach(function (m, idx) {
+          const val = Math.min(100, Math.max(0, m.rate));
+          const barH = (val / 100) * plotH;
+          const x = padLeft + idx * slotW + (slotW - barW) / 2;
+          const y = padTop + plotH - barH;
+
+          const grad = ctx.createLinearGradient(0, y, 0, padTop + plotH);
+          if (val >= 80) {
+            grad.addColorStop(0, '#10B981');
+            grad.addColorStop(1, '#047857');
+          } else {
+            grad.addColorStop(0, '#0284C7');
+            grad.addColorStop(1, '#1B365D');
+          }
+
+          ctx.fillStyle = grad;
+          ctx.beginPath();
+          const r = Math.min(6, barW / 2, barH);
+          if (barH > 0) {
+            ctx.moveTo(x, padTop + plotH);
+            ctx.lineTo(x, y + r);
+            ctx.quadraticCurveTo(x, y, x + r, y);
+            ctx.lineTo(x + barW - r, y);
+            ctx.quadraticCurveTo(x + barW, y, x + barW, y + r);
+            ctx.lineTo(x + barW, padTop + plotH);
+            ctx.closePath();
+            ctx.fill();
+          }
+
+          ctx.fillStyle = val >= 80 ? '#047857' : '#0F172A';
+          ctx.font = 'bold 11px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(val + '%', x + barW / 2, y - 10);
+
+          ctx.fillStyle = '#1E293B';
+          ctx.font = 'bold 11px sans-serif';
+          ctx.fillText(m.officer.role, x + barW / 2, padTop + plotH + 14);
+          ctx.fillStyle = '#64748B';
+          ctx.font = '10px sans-serif';
+          ctx.fillText(m.officer.name, x + barW / 2, padTop + plotH + 28);
+
+          hits.push({ x: x, y: padTop, w: barW, h: plotH, metric: m });
+        });
+
+        chartHitAreas[hitKey] = hits;
+      }
+
+      function bindChartInteraction(canvasId, tooltipId, hitKey) {
+        const canvas = document.getElementById(canvasId);
+        const tip = document.getElementById(tooltipId);
+        if (!canvas || !tip) return;
+
+        canvas.addEventListener('mousemove', function (e) {
+          const rect = canvas.getBoundingClientRect();
+          const mx = e.clientX - rect.left;
+          const my = e.clientY - rect.top;
+          const hits = chartHitAreas[hitKey] || [];
+          let found = null;
+          for (let i = 0; i < hits.length; i++) {
+            const h = hits[i];
+            if (mx >= h.x - 6 && mx <= h.x + h.w + 6 && my >= h.y && my <= h.y + h.h) {
+              found = h.metric;
+              break;
+            }
+          }
+          if (!found) {
+            tip.classList.add('hidden');
+            return;
+          }
+          tip.innerHTML =
+            '<strong>' + escapeHtml(found.officer.role) + ' ' + escapeHtml(found.officer.name) + '</strong> (' + escapeHtml(found.officer.dept) + ')<br>' +
+            '평균 달성률: <strong style="color:#38BDF8;">' + found.rate + '%</strong><br>' +
+            '지표 현황: 완료 ' + found.done + ' / 전체 ' + found.total + '건';
+          tip.style.left = Math.min(rect.width - 170, Math.max(8, mx + 12)) + 'px';
+          tip.style.top = Math.max(8, my - 20) + 'px';
+          tip.classList.remove('hidden');
+        });
+
+        canvas.addEventListener('mouseleave', function () {
+          tip.classList.add('hidden');
+        });
+
+        canvas.addEventListener('click', function (e) {
+          const rect = canvas.getBoundingClientRect();
+          const mx = e.clientX - rect.left;
+          const hits = chartHitAreas[hitKey] || [];
+          for (let i = 0; i < hits.length; i++) {
+            const h = hits[i];
+            if (mx >= h.x - 6 && mx <= h.x + h.w + 6) {
+              filterByDeptAndShowKpi(h.metric.officer.dept);
+              break;
+            }
+          }
+        });
+      }
+
+      function filterByDeptAndShowKpi(dept) {
+        const sel = document.getElementById('kpiDeptFilter');
+        if (sel) sel.value = dept;
+        document.querySelectorAll('.tab-btn').forEach(function (b) {
+          b.classList.toggle('active', b.getAttribute('data-tab') === 'kpi');
+        });
+        document.querySelectorAll('.tab-panel').forEach(function (p) {
+          p.classList.toggle('hidden', p.id !== 'tab-kpi');
+        });
+        renderKpis();
+        showToast(dept + ' KPI 목록으로 필터링되었습니다.');
+      }
+
+      function renderHeroKpiChart() {
+        const metrics = computeOfficerMetrics();
+        drawKpiBarChart('heroKpiCanvas', 'hero', metrics);
+
+        const badgeWrap = document.getElementById('heroDeptBadges');
+        if (badgeWrap) {
+          badgeWrap.innerHTML = metrics.map(function (m) {
+            return (
+              '<button type="button" data-filter-dept="' + escapeHtml(m.officer.dept) + '" class="dept-mini-badge">' +
+                escapeHtml(m.officer.role) + ' ' + escapeHtml(m.officer.name) + ' · ' + m.rate + '% (' + m.done + '/' + m.total + ')' +
+              '</button>'
+            );
+          }).join('');
+        }
+      }
+
+      function renderSummary() {
+        const kpis = state.kpis || [];
+        const total = kpis.length;
+        const completed = kpis.filter(function (k) { return k.status === '완료'; }).length;
+        const inProgress = kpis.filter(function (k) { return k.status === '진행중'; }).length;
+        const avgRate = total > 0
+          ? kpis.reduce(function (acc, k) { return acc + Math.min(100, calcRate(k.current, k.target)); }, 0) / total
+          : 0;
+
+        document.getElementById('statTotalKpi').textContent = total + '개';
+        document.getElementById('statAvgRate').textContent = avgRate.toFixed(1) + '%';
+        document.getElementById('statCompletedKpi').textContent = completed + '개';
+        document.getElementById('statInProgressKpi').textContent = '진행중 ' + inProgress + '개';
+        document.getElementById('statLogsAndTasks').textContent = ((state.logs || []).length + (state.tasks || []).length) + '건';
+
+        const chatBadgeEl = document.getElementById('tabChatBadge');
+        if (chatBadgeEl) chatBadgeEl.textContent = '(' + (state.chats || []).length + ')';
+        document.getElementById('tabTaskBadge').textContent = '(' + (state.tasks || []).length + ')';
+        document.getElementById('tabLogBadge').textContent = '(' + (state.logs || []).length + ')';
+        const pledges = state.pledges || [];
+        const pAvg = pledges.length > 0
+          ? pledges.reduce(function (acc, p) { return acc + (Number(p.rate) || 0); }, 0) / pledges.length
+          : 0;
+        document.getElementById('tabPledgeBadge').textContent = '(' + pAvg.toFixed(0) + '%)';
+        document.getElementById('tabReceiptBadge').textContent = '(' + (state.receipts || []).length + ')';
+
+        const unread = (state.notifications || []).filter(function (n) { return !n.read; }).length;
+        document.getElementById('unreadNotifCount').textContent = String(unread);
+      }
+
+      function renderKpis() {
+        const deptFilter = document.getElementById('kpiDeptFilter').value;
+        const statusFilter = document.getElementById('kpiStatusFilter').value;
+        const tbody = document.getElementById('kpiTableBody');
+        const filtered = (state.kpis || []).filter(function (k) {
+          const okDept = deptFilter === 'ALL' || k.dept === deptFilter;
+          const okStatus = statusFilter === 'ALL' || k.status === statusFilter;
+          return okDept && okStatus;
+        });
+
+        if (filtered.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" class="center" style="padding: 24px; color: #94A3B8;">조건에 맞는 KPI 지표가 없습니다.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = filtered.map(function (k) {
+          const rate = calcRate(k.current, k.target);
+          return (
+            '<tr>' +
+              '<td><div style="font-weight: 800;">' + escapeHtml(k.dept) + '</div><div style="font-size: 11px; color: #64748B;">' + escapeHtml(k.owner) + '</div></td>' +
+              '<td style="font-weight: 700;">' + escapeHtml(k.title) + '</td>' +
+              '<td class="num-right" style="font-weight: 700;">' + Number(k.target) + ' ' + escapeHtml(k.unit) + '</td>' +
+              '<td class="num-right"><input type="number" step="any" data-kpi-current="' + escapeHtml(k.id) + '" value="' + Number(k.current) + '" class="mini-num" /> <span style="font-size: 11px; color: #64748B;">' + escapeHtml(k.unit) + '</span></td>' +
+              '<td class="num-right" style="font-weight: 900; color: ' + (rate >= 80 ? '#059669' : '#1B365D') + ';">' + rate.toFixed(1) + '%</td>' +
+              '<td><select data-kpi-status="' + escapeHtml(k.id) + '" class="mini-sel">' +
+                ['진행전', '진행중', '완료', '보류'].map(function (st) {
+                  return '<option value="' + st + '"' + (k.status === st ? ' selected' : '') + '>' + st + '</option>';
+                }).join('') +
+              '</select></td>' +
+              '<td style="font-size: 12px; color: #64748B;">' + escapeHtml(k.due || '-') + '</td>' +
+              '<td class="center"><button type="button" data-delete-kpi="' + escapeHtml(k.id) + '" class="del-link">삭제</button></td>' +
+            '</tr>'
+          );
+        }).join('');
+      }
+
+      function renderChats(forceScrollBottom) {
+        const box = document.getElementById('chatMessagesBox');
+        if (!box) return;
+        const chats = Array.isArray(state.chats) ? state.chats : [];
+        const wasNearBottom = (box.scrollHeight - box.scrollTop - box.clientHeight) < 80;
+
+        if (chats.length === 0) {
+          box.innerHTML = '<div class="chat-empty">아직 대화가 없습니다.<br>아래 입력창에서 임원진과 첫 인사를 나눠 보세요! 💬</div>';
+          return;
+        }
+
+        const myId = currentUser ? currentUser.id : '';
+        box.innerHTML = chats.map(function (c) {
+          const isMine = myId && c.authorId === myId;
+          const shortName = String(c.authorName || c.authorRole || '?').slice(-2);
+          return (
+            '<div class="chat-row ' + (isMine ? 'mine' : 'other') + '">' +
+              (!isMine ? '<div class="chat-avatar" title="' + escapeHtml(c.authorRole + ' ' + c.authorName) + '">' + escapeHtml(shortName) + '</div>' : '') +
+              '<div class="chat-bubble-wrap">' +
+                (!isMine ? '<div class="chat-sender">' + escapeHtml(c.authorRole || '') + ' ' + escapeHtml(c.authorName || '') + ' <span style="font-weight:500;color:#64748B;">(' + escapeHtml(c.dept || '') + ')</span></div>' : '') +
+                '<div class="chat-bubble-line">' +
+                  '<div class="chat-bubble">' + escapeHtml(c.text) + '</div>' +
+                  '<div class="chat-meta">' +
+                    '<span>' + escapeHtml(c.time || '') + '</span>' +
+                    (isMine ? '<button type="button" class="chat-del-btn" data-delete-chat="' + escapeHtml(c.id) + '">삭제</button>' : '') +
+                  '</div>' +
+                '</div>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+
+        if (forceScrollBottom || wasNearBottom) {
+          box.scrollTop = box.scrollHeight;
+        }
+      }
+
+      function renderTasks() {
+        const box = document.getElementById('taskList');
+        const tasks = state.tasks || [];
+        if (tasks.length === 0) {
+          box.innerHTML = '<div style="text-align: center; padding: 24px; color: #94A3B8; font-size: 13px;">등록된 업무 공유가 없습니다.</div>';
+          return;
+        }
+        box.innerHTML = tasks.map(function (t) {
+          return (
+            '<div class="receipt-row" style="align-items: flex-start;">' +
+              '<div>' +
+                '<div style="display: flex; flex-wrap: wrap; gap: 6px; align-items: center; font-size: 11px; margin-bottom: 4px;">' +
+                  '<span class="badge-pill">' + escapeHtml(t.priority) + '</span>' +
+                  '<strong>' + escapeHtml(t.author) + '</strong>' +
+                  '<span style="color: #64748B;">→ 수신: ' + escapeHtml(t.target) + '</span>' +
+                  '<span style="color: #94A3B8;">' + escapeHtml(t.time) + '</span>' +
+                '</div>' +
+                '<div style="font-size: 14px; font-weight: 800; color: #0F172A;">' + escapeHtml(t.title) + '</div>' +
+                (t.detail ? '<div style="font-size: 12px; color: #475569; margin-top: 4px; white-space: pre-line;">' + escapeHtml(t.detail) + '</div>' : '') +
+              '</div>' +
+              '<button type="button" data-delete-task="' + escapeHtml(t.id) + '" class="del-link">삭제</button>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function renderLogs() {
+        const tbody = document.getElementById('logTableBody');
+        const logs = state.logs || [];
+        if (logs.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="8" class="center" style="padding: 24px; color: #94A3B8;">기록된 활동 로그가 없습니다.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = logs.map(function (l) {
+          return (
+            '<tr>' +
+              '<td style="font-size: 12px;">' + escapeHtml(l.date) + '</td>' +
+              '<td style="font-size: 12px; font-weight: 700;">' + escapeHtml(l.dept) + '</td>' +
+              '<td style="font-weight: 700;">' + escapeHtml(l.title) + '</td>' +
+              '<td style="font-size: 12px; color: #475569;">' + escapeHtml(l.kpiTitle || '-') + (l.delta ? ' (+' + Number(l.delta) + ')' : '') + '</td>' +
+              '<td class="num-right" style="font-size: 12px;">' + (Number(l.participants) || 0) + '명</td>' +
+              '<td class="num-right" style="font-size: 12px;">' + escapeHtml(l.satisfaction || '-') + '</td>' +
+              '<td style="font-size: 12px; color: #64748B;">' + escapeHtml(l.note || '-') + '</td>' +
+              '<td class="center"><button type="button" data-delete-log="' + escapeHtml(l.id) + '" class="del-link">삭제</button></td>' +
+            '</tr>'
+          );
+        }).join('');
+      }
+
+      function renderPledges() {
+        const pledges = state.pledges || [];
+        const avg = pledges.length > 0
+          ? pledges.reduce(function (a, b) { return a + (Number(b.rate) || 0); }, 0) / pledges.length
+          : 0;
+        const doneCount = pledges.filter(function (p) { return (Number(p.rate) || 0) >= 100; }).length;
+
+        document.getElementById('pledgeAvgRate').textContent = avg.toFixed(1) + '%';
+        document.getElementById('pledgeCountSummary').textContent = '완료: ' + doneCount + '건 / 전체: ' + pledges.length + '건';
+
+        const listEl = document.getElementById('pledgeList');
+        listEl.innerHTML = pledges.map(function (p) {
+          const r = Math.min(100, Math.max(0, Number(p.rate) || 0));
+          return (
+            '<div class="pledge-item">' +
+              '<div class="pledge-top">' +
+                '<span>' + escapeHtml(p.dept) + ' · ' + escapeHtml(p.field) + '</span>' +
+                '<button type="button" data-delete-pledge="' + escapeHtml(p.id) + '" class="del-link">삭제</button>' +
+              '</div>' +
+              '<div class="pledge-title">' + escapeHtml(p.title) + '</div>' +
+              '<div class="range-row">' +
+                '<input type="range" min="0" max="100" value="' + r + '" data-pledge-range="' + escapeHtml(p.id) + '" />' +
+                '<span class="range-val">' + r + '%</span>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function renderReceipts() {
+        const listEl = document.getElementById('receiptsList');
+        const receipts = Array.isArray(state.receipts) ? state.receipts : [];
+        const incomes = Array.isArray(state.incomes) ? state.incomes : [];
+
+        const incomeSum = incomes.reduce(function (a, b) { return a + (Number(b.amount) || 0); }, 0);
+        const expenseSum = receipts.reduce(function (a, b) { return a + (Number(b.amount) || 0); }, 0);
+        const balance = incomeSum - expenseSum;
+
+        document.getElementById('ledgerIncomeTotal').textContent = incomeSum.toLocaleString('ko-KR') + '원';
+        document.getElementById('ledgerIncomeCount').textContent = incomes.length + '건';
+        document.getElementById('ledgerExpenseTotal').textContent = expenseSum.toLocaleString('ko-KR') + '원';
+        document.getElementById('ledgerExpenseCount').textContent = receipts.length + '건';
+        document.getElementById('ledgerBalanceTotal').textContent = balance.toLocaleString('ko-KR') + '원';
+
+        if (!listEl) return;
+        if (receipts.length === 0) {
+          listEl.innerHTML = '<div style="text-align: center; padding: 24px; color: #94A3B8; border: 1px dashed #CBD5E1; border-radius: 14px; font-size: 13px;">등록된 영수증·명세표 지출 내역이 없습니다.</div>';
+          return;
+        }
+
+        listEl.innerHTML = receipts.map(function (r) {
+          const amt = Number(r.amount || 0).toLocaleString('ko-KR');
+          const thumbHtml = r.photo
+            ? '<img src="' + r.photo + '" data-zoom-receipt="' + escapeHtml(r.id) + '" alt="영수증 사진" class="receipt-thumb" />'
+            : '<div class="receipt-empty-thumb">사진없음</div>';
+          return (
+            '<div class="receipt-row">' +
+              '<div class="receipt-left">' +
+                thumbHtml +
+                '<div>' +
+                  '<div style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap;">' +
+                    '<span class="badge-pill">' + escapeHtml(r.docType || '영수증') + '</span>' +
+                    '<strong style="font-size: 14px; color: #0F172A;">' + escapeHtml(r.title || '지출 항목') + '</strong>' +
+                  '</div>' +
+                  '<div style="font-size: 12px; color: #64748B; margin-top: 2px;">' + escapeHtml(r.dept || '') + ' · ' + escapeHtml(r.date || '') + (r.photo ? ' · 클릭해 크게 보기' : '') + '</div>' +
+                '</div>' +
+              '</div>' +
+              '<div style="display: flex; align-items: center; gap: 12px;">' +
+                '<span style="font-weight: 900; color: #E11D48; font-size: 14px;">-' + amt + '원</span>' +
+                '<button type="button" data-delete-receipt="' + escapeHtml(r.id) + '" class="del-link">삭제</button>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function renderAnalytics() {
+        const metrics = computeOfficerMetrics();
+        const tbody = document.getElementById('deptSummaryBody');
+        tbody.innerHTML = metrics.map(function (m) {
+          return (
+            '<tr>' +
+              '<td style="font-weight: 800;">' + escapeHtml(m.officer.role) + '</td>' +
+              '<td>' + escapeHtml(m.officer.name) + '</td>' +
+              '<td style="font-size: 12px; color: #475569;">' + escapeHtml(m.officer.dept) + '</td>' +
+              '<td style="font-size: 12px; color: #64748B;">' + m.done + ' / ' + m.total + ' 완료</td>' +
+              '<td class="num-right" style="font-weight: 900; color: ' + (m.rate >= 80 ? '#059669' : '#1B365D') + ';">' + m.rate + '%</td>' +
+            '</tr>'
+          );
+        }).join('');
+
+        drawKpiBarChart('deptChartCanvas', 'analytics', metrics);
+      }
+
+      function renderNotifications() {
+        const whInput = document.getElementById('discordWebhookInput');
+        if (whInput) whInput.value = (state.notifyConfig && state.notifyConfig.webhookUrl) || '';
+
+        const list = document.getElementById('notifFeedList');
+        const items = state.notifications || [];
+        if (items.length === 0) {
+          list.innerHTML = '<div style="text-align: center; padding: 24px; color: #94A3B8;">최근 알림이 없습니다.</div>';
+          return;
+        }
+        list.innerHTML = items.map(function (n) {
+          return (
+            '<div style="border: 1px solid #E2E8F0; border-radius: 12px; padding: 10px; background: ' + (n.read ? '#FFFFFF' : '#EFF6FF') + ';">' +
+              '<div style="display: flex; justify-content: space-between; font-size: 11px; color: #64748B;">' +
+                '<strong style="color: #1B365D;">[' + escapeHtml(n.category) + '] ' + escapeHtml(n.actor) + '</strong>' +
+                '<span>' + escapeHtml(n.time) + '</span>' +
+              '</div>' +
+              '<div style="font-weight: 800; color: #0F172A; margin-top: 3px;">' + escapeHtml(n.title) + '</div>' +
+              (n.detail ? '<div style="color: #475569; margin-top: 2px;">' + escapeHtml(n.detail) + '</div>' : '') +
+            '</div>'
+          );
+        }).join('');
+      }
+
+      function refreshKpiSelectOptions() {
+        const logKpiSelect = document.getElementById('logKpiSelect');
+        if (!logKpiSelect) return;
+        const prev = logKpiSelect.value;
+        logKpiSelect.innerHTML = '<option value="">연관 KPI 지표 선택 (선택 사항)</option>' +
+          (state.kpis || []).map(function (k) {
+            return '<option value="' + escapeHtml(k.id) + '">[' + escapeHtml(k.dept) + '] ' + escapeHtml(k.title) + '</option>';
+          }).join('');
+        logKpiSelect.value = prev;
+      }
+
+      function renderAll() {
+        renderSummary();
+        renderHeroKpiChart();
+        renderKpis();
+        renderChats(false);
+        renderTasks();
+        renderLogs();
+        renderPledges();
+        renderReceipts();
+        renderAnalytics();
+        renderNotifications();
+        refreshKpiSelectOptions();
+      }
+
+      function initSelectors() {
+        const savedAmbient = localStorage.getItem(AMBIENT_KEY) || DEFAULT_AMBIENT;
+        applyAmbientTheme(savedAmbient);
+
+        document.getElementById('loginRoleSelect').innerHTML = '<option value="">-- 직책 및 성명을 선택하세요 --</option>' +
+          OFFICERS.map(function (o) {
+            return '<option value="' + o.id + '">' + o.role + ' ' + o.name + ' · ' + o.dept + ' (' + o.major + ')</option>';
+          }).join('');
+
+        document.getElementById('kpiDeptFilter').innerHTML = '<option value="ALL">전체 직책 / 부서 (9개)</option>' +
+          OFFICERS.map(function (o) {
+            return '<option value="' + o.dept + '">' + o.role + ' ' + o.name + ' (' + o.dept + ')</option>';
+          }).join('');
+
+        ['taskAuthor', 'logDept', 'pledgeDept', 'receiptDept', 'newKpiDept'].forEach(function (id) {
+          const el = document.getElementById(id);
+          if (!el) return;
+          el.innerHTML = OFFICERS.map(function (o) {
+            const val = id === 'taskAuthor' ? (o.role + ' ' + o.name) : o.dept;
+            const label = id === 'taskAuthor' ? (o.role + ' ' + o.name + ' (' + o.dept + ')') : (o.dept + ' — ' + o.role + ' ' + o.name);
+            return '<option value="' + val + '">' + label + '</option>';
+          }).join('');
+        });
+
+        document.getElementById('deptExcelButtons').innerHTML = OFFICERS.map(function (o) {
+          return (
+            '<button type="button" data-excel-dept="' + o.dept + '" class="dept-btn">' +
+              '<div class="dept-btn-role">' + o.role + '</div>' +
+              '<div class="dept-btn-name">' + o.name + '</div>' +
+            '</button>'
+          );
+        }).join('');
+      }
+
+      function enterDashboard(officer) {
+        currentUser = officer;
+        document.getElementById('currentUserLabel').textContent = officer.role + ' ' + officer.name + ' (' + officer.dept + ')';
+        document.getElementById('loginGate').classList.add('hidden');
+        document.getElementById('dashboardApp').classList.remove('hidden');
+        document.getElementById('roomCodeInput').value = localStorage.getItem(ROOM_KEY) || DEFAULT_ROOM;
+        document.getElementById('gasUrlInput').value = getGasUrl();
+        renderAll();
+        syncNow(null, false);
+        startAutoSyncLoop();
+      }
+
+      function initLogin() {
+        document.getElementById('loginAmbientSelect').addEventListener('change', function () {
+          applyAmbientTheme(this.value);
+        });
+
+        document.getElementById('togglePinBtn').addEventListener('click', function () {
+          const inp = document.getElementById('loginPinInput');
+          const isPwd = inp.type === 'password';
+          inp.type = isPwd ? 'text' : 'password';
+          this.textContent = isPwd ? '숨김' : '표시';
+        });
+
+        document.getElementById('loginSubmitBtn').addEventListener('click', function () {
+          const id = document.getElementById('loginRoleSelect').value;
+          const pin = document.getElementById('loginPinInput').value.trim();
+          const errEl = document.getElementById('loginErrorMsg');
+          const officer = OFFICERS.find(function (o) { return o.id === id; });
+
+          if (!officer) { errEl.textContent = '직책 및 성명을 먼저 선택해 주세요.'; return; }
+          const expectedPin = (state.pins && state.pins.custom && state.pins.custom[id]) || (state.pins && state.pins.defaultPin) || '2026';
+          if (pin !== expectedPin) { errEl.textContent = '비밀번호가 일치하지 않습니다. (초기값: 2026)'; return; }
+          errEl.textContent = '';
+          if (document.getElementById('autoLoginCheck').checked) localStorage.setItem(AUTH_KEY, id);
+          else localStorage.removeItem(AUTH_KEY);
+          enterDashboard(officer);
+        });
+
+        const savedAuthId = localStorage.getItem(AUTH_KEY);
+        if (savedAuthId) {
+          const found = OFFICERS.find(function (o) { return o.id === savedAuthId; });
+          if (found) {
+            document.getElementById('loginRoleSelect').value = found.id;
+            enterDashboard(found);
+          }
+        }
+      }
+
+      function initEvents() {
+        bindChartInteraction('heroKpiCanvas', 'heroChartTooltip', 'hero');
+        bindChartInteraction('deptChartCanvas', 'analyticsChartTooltip', 'analytics');
+
+        document.getElementById('resetChartFilterBtn').addEventListener('click', function () {
+          document.getElementById('kpiDeptFilter').value = 'ALL';
+          renderKpis();
+          showToast('전체 직책/부서 KPI를 표시합니다.');
+        });
+
+        document.getElementById('heroDeptBadges').addEventListener('click', function (e) {
+          const btn = e.target.closest('[data-filter-dept]');
+          if (!btn) return;
+          filterByDeptAndShowKpi(btn.getAttribute('data-filter-dept'));
+        });
+
+        document.getElementById('ambientMoodSelect').addEventListener('change', function () {
+          applyAmbientTheme(this.value);
+          showToast('엠비언트 조명이 변경되었습니다.');
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function () {
+          stopAutoSyncLoop();
+          stopLiveCamera();
+          localStorage.removeItem(AUTH_KEY);
+          currentUser = null;
+          document.getElementById('dashboardApp').classList.add('hidden');
+          document.getElementById('loginGate').classList.remove('hidden');
+        });
+
+        document.querySelectorAll('.tab-btn').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            const targetTab = btn.getAttribute('data-tab');
+            document.querySelectorAll('.tab-btn').forEach(function (b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.querySelectorAll('.tab-panel').forEach(function (p) { p.classList.add('hidden'); });
+            document.getElementById('tab-' + targetTab).classList.remove('hidden');
+            if (targetTab !== 'receipts') stopLiveCamera();
+            if (targetTab === 'analytics') renderAnalytics();
+            if (targetTab === 'chat') {
+              renderChats(true);
+              syncNow(null, true);
+            }
+          });
+        });
+
+        document.getElementById('kpiDeptFilter').addEventListener('change', renderKpis);
+        document.getElementById('kpiStatusFilter').addEventListener('change', renderKpis);
+        document.getElementById('manualSyncBtn').addEventListener('click', function () { syncNow(null, false); });
+        document.getElementById('roomCodeInput').addEventListener('change', function () { getRoomCode(); syncNow(null, false); });
+
+        // 단톡방 이벤트
+        document.getElementById('chatRefreshBtn').addEventListener('click', function () {
+          syncNow(null, false);
+        });
+
+        document.querySelectorAll('[data-chat-quick]').forEach(function (chip) {
+          chip.addEventListener('click', function () {
+            const inp = document.getElementById('chatInput');
+            if (!inp) return;
+            const txt = chip.getAttribute('data-chat-quick') || '';
+            inp.value = inp.value ? (inp.value + ' ' + txt) : txt;
+            inp.focus();
+          });
+        });
+
+        document.getElementById('chatForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const inp = document.getElementById('chatInput');
+          const text = inp ? inp.value.trim() : '';
+          if (!text) return;
+          const now = new Date();
+          const hhmm = now.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' });
+          const msgItem = {
+            id: 'c_' + Date.now() + '_' + Math.random().toString(36).slice(2, 5),
+            authorId: currentUser ? currentUser.id : 'unknown',
+            authorRole: currentUser ? currentUser.role : '임원',
+            authorName: currentUser ? currentUser.name : '익명',
+            dept: currentUser ? currentUser.dept : '',
+            text: text,
+            time: hhmm,
+            isoTime: now.toISOString()
+          };
+          if (!Array.isArray(state.chats)) state.chats = [];
+          state.chats.push(msgItem);
+          if (state.chats.length > 150) {
+            state.chats = state.chats.slice(state.chats.length - 150);
+          }
+          inp.value = '';
+          const ev = addNotification('임원 단톡방', msgItem.authorRole + ' ' + msgItem.authorName, text);
+          saveLocalState();
+          renderChats(true);
+          renderSummary();
+          syncNow(ev, false);
+        });
+
+        document.getElementById('chatMessagesBox').addEventListener('click', function (e) {
+          const delId = e.target.getAttribute('data-delete-chat');
+          if (!delId) return;
+          state.chats = (state.chats || []).filter(function (c) { return c.id !== delId; });
+          saveLocalState();
+          renderChats(false);
+          renderSummary();
+          syncNow(null, false);
+        });
+
+        function openSheetModal() {
+          document.getElementById('gasUrlInput').value = getGasUrl();
+          document.getElementById('sheetModal').classList.remove('hidden');
+        }
+        function closeSheetModal() { document.getElementById('sheetModal').classList.add('hidden'); }
+        document.getElementById('openSheetModalBtn').addEventListener('click', openSheetModal);
+        document.getElementById('bannerSheetBtn').addEventListener('click', openSheetModal);
+        document.getElementById('closeSheetModalBtn').addEventListener('click', closeSheetModal);
+        document.getElementById('cancelSheetModalBtn').addEventListener('click', closeSheetModal);
+        document.getElementById('saveAndSyncSheetBtn').addEventListener('click', function () {
+          setGasUrl(document.getElementById('gasUrlInput').value);
+          closeSheetModal();
+          const ev = addNotification('연동 설정', '구글 시트 웹 앱 URL 저장', getGasUrl());
+          syncNow(ev, false);
+        });
+
+        function openNotifModal() {
+          renderNotifications();
+          document.getElementById('notifModal').classList.remove('hidden');
+        }
+        function closeNotifModal() { document.getElementById('notifModal').classList.add('hidden'); }
+        document.getElementById('openNotifModalBtn').addEventListener('click', openNotifModal);
+        document.getElementById('bannerNotifBtn').addEventListener('click', openNotifModal);
+        document.getElementById('closeNotifModalBtn').addEventListener('click', closeNotifModal);
+        document.getElementById('closeNotifModalBtn2').addEventListener('click', closeNotifModal);
+
+        document.getElementById('saveWebhookBtn').addEventListener('click', function () {
+          const wh = document.getElementById('discordWebhookInput').value.trim();
+          if (wh && wh.indexOf('https://') !== 0) {
+            showToast('웹훅 주소는 https:// 로 시작해야 합니다.', true);
+            return;
+          }
+          state.notifyConfig = { webhookUrl: wh };
+          const ev = addNotification('알림 설정', '디스코드 웹훅 연결 완료', wh ? '실시간 휴대폰 알림 활성' : '웹훅 해제됨');
+          syncNow(ev, false);
+        });
+
+        document.getElementById('markAllReadBtn').addEventListener('click', function () {
+          (state.notifications || []).forEach(function (n) { n.read = true; });
+          saveLocalState();
+          renderSummary();
+          renderNotifications();
+        });
+
+        document.getElementById('openKpiModalBtn').addEventListener('click', function () { document.getElementById('kpiModal').classList.remove('hidden'); });
+        document.getElementById('closeKpiModalBtn').addEventListener('click', function () { document.getElementById('kpiModal').classList.add('hidden'); });
+        document.getElementById('cancelKpiModalBtn').addEventListener('click', function () { document.getElementById('kpiModal').classList.add('hidden'); });
+
+        document.getElementById('kpiCreateForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const dept = document.getElementById('newKpiDept').value;
+          const officer = OFFICERS.find(function (o) { return o.dept === dept; });
+          const newItem = {
+            id: 'k_' + Date.now(),
+            dept: dept,
+            owner: officer ? (officer.name + ' · ' + officer.role) : dept,
+            title: document.getElementById('newKpiTitle').value.trim(),
+            unit: document.getElementById('newKpiUnit').value.trim() || '건',
+            target: Number(document.getElementById('newKpiTarget').value) || 1,
+            current: Number(document.getElementById('newKpiCurrent').value) || 0,
+            status: document.getElementById('newKpiStatus').value,
+            due: document.getElementById('newKpiDue').value || ''
+          };
+          state.kpis.unshift(newItem);
+          const ev = addNotification('KPI 추가', newItem.title, dept + ' 목표 ' + newItem.target + newItem.unit);
+          document.getElementById('kpiModal').classList.add('hidden');
+          this.reset();
+          syncNow(ev, false);
+        });
+
+        document.getElementById('kpiTableBody').addEventListener('change', function (e) {
+          const curId = e.target.getAttribute('data-kpi-current');
+          const stId = e.target.getAttribute('data-kpi-status');
+          if (curId) {
+            const item = state.kpis.find(function (k) { return k.id === curId; });
+            if (item) {
+              item.current = Number(e.target.value) || 0;
+              const ev = addNotification('실적 수정', item.title, '현재 실적: ' + item.current + item.unit);
+              syncNow(ev, false);
+            }
+          } else if (stId) {
+            const item = state.kpis.find(function (k) { return k.id === stId; });
+            if (item) {
+              item.status = e.target.value;
+              const ev = addNotification('상태 변경', item.title, '상태: ' + item.status);
+              syncNow(ev, false);
+            }
+          }
+        });
+
+        document.getElementById('kpiTableBody').addEventListener('click', function (e) {
+          const delId = e.target.getAttribute('data-delete-kpi');
+          if (!delId) return;
+          state.kpis = state.kpis.filter(function (k) { return k.id !== delId; });
+          const ev = addNotification('KPI 삭제', 'KPI 항목 삭제됨', '');
+          syncNow(ev, false);
+        });
+
+        document.getElementById('taskForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const item = {
+            id: 't_' + Date.now(),
+            author: document.getElementById('taskAuthor').value,
+            target: document.getElementById('taskTarget').value.trim() || '전체 임원',
+            priority: document.getElementById('taskPriority').value,
+            title: document.getElementById('taskTitle').value.trim(),
+            detail: document.getElementById('taskDetail').value.trim(),
+            time: new Date().toLocaleString('ko-KR')
+          };
+          state.tasks.unshift(item);
+          const ev = addNotification('업무 공유', item.title, item.author + ' → ' + item.target);
+          this.reset();
+          document.getElementById('taskTarget').value = '전체 임원';
+          syncNow(ev, false);
+        });
+
+        document.getElementById('taskList').addEventListener('click', function (e) {
+          const delId = e.target.getAttribute('data-delete-task');
+          if (!delId) return;
+          state.tasks = state.tasks.filter(function (t) { return t.id !== delId; });
+          syncNow(null, false);
+        });
+
+        const todayStr = new Date().toISOString().slice(0, 10);
+        document.getElementById('logDate').value = todayStr;
+        document.getElementById('receiptDate').value = todayStr;
+        document.getElementById('incomeDate').value = todayStr;
+
+        document.getElementById('logForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const kpiId = document.getElementById('logKpiSelect').value;
+          const delta = Number(document.getElementById('logDelta').value) || 0;
+          let linkedTitle = '';
+          if (kpiId) {
+            const targetKpi = state.kpis.find(function (k) { return k.id === kpiId; });
+            if (targetKpi) {
+              linkedTitle = targetKpi.title;
+              targetKpi.current = (Number(targetKpi.current) || 0) + delta;
+            }
+          }
+          const item = {
+            id: 'l_' + Date.now(),
+            date: document.getElementById('logDate').value,
+            dept: document.getElementById('logDept').value,
+            title: document.getElementById('logTitle').value.trim(),
+            kpiId: kpiId,
+            kpiTitle: linkedTitle,
+            delta: delta,
+            participants: Number(document.getElementById('logParticipants').value) || 0,
+            satisfaction: document.getElementById('logSatisfaction').value,
+            note: document.getElementById('logNote').value.trim()
+          };
+          state.logs.unshift(item);
+          const ev = addNotification('실적 로그', item.title, item.dept + (delta ? ' (KPI +' + delta + ')' : ''));
+          document.getElementById('logTitle').value = '';
+          document.getElementById('logDelta').value = '0';
+          document.getElementById('logNote').value = '';
+          syncNow(ev, false);
+        });
+
+        document.getElementById('logTableBody').addEventListener('click', function (e) {
+          const delId = e.target.getAttribute('data-delete-log');
+          if (!delId) return;
+          state.logs = state.logs.filter(function (l) { return l.id !== delId; });
+          syncNow(null, false);
+        });
+
+        document.getElementById('pledgeForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const item = {
+            id: 'p_' + Date.now(),
+            dept: document.getElementById('pledgeDept').value,
+            field: document.getElementById('pledgeField').value,
+            title: document.getElementById('pledgeTitle').value.trim(),
+            rate: Math.min(100, Math.max(0, Number(document.getElementById('pledgeRate').value) || 0))
+          };
+          state.pledges.unshift(item);
+          const ev = addNotification('공약 등록', item.title, item.dept + ' (' + item.rate + '%)');
+          document.getElementById('pledgeTitle').value = '';
+          document.getElementById('pledgeRate').value = '0';
+          syncNow(ev, false);
+        });
+
+        document.getElementById('pledgeList').addEventListener('input', function (e) {
+          const pid = e.target.getAttribute('data-pledge-range');
+          if (!pid) return;
+          const p = state.pledges.find(function (x) { return x.id === pid; });
+          if (p) {
+            p.rate = Number(e.target.value) || 0;
+            saveLocalState();
+            renderPledges();
+            renderSummary();
+          }
+        });
+
+        document.getElementById('pledgeList').addEventListener('change', function (e) {
+          const pid = e.target.getAttribute('data-pledge-range');
+          if (!pid) return;
+          const p = state.pledges.find(function (x) { return x.id === pid; });
+          if (p) {
+            const ev = addNotification('공약 달성률', p.title, p.rate + '%');
+            syncNow(ev, false);
+          }
+        });
+
+        document.getElementById('pledgeList').addEventListener('click', function (e) {
+          const delId = e.target.getAttribute('data-delete-pledge');
+          if (!delId) return;
+          state.pledges = state.pledges.filter(function (x) { return x.id !== delId; });
+          syncNow(null, false);
+        });
+
+        document.getElementById('incomeForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const item = {
+            id: 'inc_' + Date.now(),
+            date: document.getElementById('incomeDate').value,
+            title: document.getElementById('incomeTitle').value.trim(),
+            amount: Number(document.getElementById('incomeAmount').value) || 0
+          };
+          state.incomes.unshift(item);
+          const ev = addNotification('학생회비 수입', item.title, '+' + item.amount.toLocaleString('ko-KR') + '원');
+          document.getElementById('incomeTitle').value = '';
+          document.getElementById('incomeAmount').value = '';
+          syncNow(ev, false);
+        });
+
+        document.getElementById('startLiveCameraBtn').addEventListener('click', startLiveCamera);
+        document.getElementById('stopLiveCameraBtn').addEventListener('click', stopLiveCamera);
+        document.getElementById('captureSnapshotBtn').addEventListener('click', captureLiveSnapshot);
+
+        async function handlePhotoFileInput(file, sourceLabel) {
+          if (!file) return;
+          try {
+            const compressed = await compressImageFile(file, 1024, 0.72);
+            setPendingReceiptPhoto(compressed, sourceLabel);
+            showToast('영수증 이미지가 첨부되었습니다.');
+          } catch (err) {
+            showToast('이미지를 불러오지 못했습니다.', true);
+          }
+        }
+
+        document.getElementById('cameraCaptureInput').addEventListener('change', function (e) {
+          const f = e.target.files && e.target.files[0];
+          handlePhotoFileInput(f, '카메라 촬영');
+          e.target.value = '';
+        });
+
+        document.getElementById('albumFileInput').addEventListener('change', function (e) {
+          const f = e.target.files && e.target.files[0];
+          handlePhotoFileInput(f, '앨범 파일');
+          e.target.value = '';
+        });
+
+        document.getElementById('clearReceiptPhotoBtn').addEventListener('click', function () {
+          setPendingReceiptPhoto('', '');
+        });
+
+        document.getElementById('receiptForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const item = {
+            id: 'r_' + Date.now(),
+            date: document.getElementById('receiptDate').value,
+            dept: document.getElementById('receiptDept').value,
+            docType: document.getElementById('receiptType').value,
+            title: document.getElementById('receiptTitle').value.trim(),
+            amount: Number(document.getElementById('receiptAmount').value) || 0,
+            photo: pendingReceiptPhoto || ''
+          };
+          state.receipts.unshift(item);
+          const ev = addNotification('영수증·지출', item.title, item.dept + ' -' + item.amount.toLocaleString('ko-KR') + '원');
+          document.getElementById('receiptTitle').value = '';
+          document.getElementById('receiptAmount').value = '';
+          setPendingReceiptPhoto('', '');
+          syncNow(ev, false);
+        });
+
+        document.getElementById('receiptsList').addEventListener('click', function (e) {
+          const zoomId = e.target.getAttribute('data-zoom-receipt');
+          if (zoomId) {
+            const found = (state.receipts || []).find(function (r) { return r.id === zoomId; });
+            if (found && found.photo) {
+              document.getElementById('lightboxTitle').textContent = (found.title || '영수증') + ' (' + found.date + ')';
+              document.getElementById('lightboxImg').src = found.photo;
+              document.getElementById('receiptLightbox').classList.remove('hidden');
+            }
+            return;
+          }
+          const delId = e.target.getAttribute('data-delete-receipt');
+          if (!delId) return;
+          state.receipts = state.receipts.filter(function (r) { return r.id !== delId; });
+          syncNow(null, false);
+        });
+
+        document.getElementById('closeLightboxBtn').addEventListener('click', function () {
+          document.getElementById('receiptLightbox').classList.add('hidden');
+        });
+
+        document.getElementById('exportAllExcelBtn').addEventListener('click', function () { exportDeptExcel(null); });
+        document.getElementById('exportAllExcelBtn2').addEventListener('click', function () { exportDeptExcel(null); });
+        document.getElementById('deptExcelButtons').addEventListener('click', function (e) {
+          const btn = e.target.closest('[data-excel-dept]');
+          if (!btn) return;
+          exportDeptExcel(btn.getAttribute('data-excel-dept'));
+        });
+
+        document.getElementById('exportReceiptsExcelBtn').addEventListener('click', function () {
+          const incHeader = ['일자', '수입 내역', '금액'];
+          const incRows = (state.incomes || []).map(function (i) { return [i.date, i.title, Number(i.amount) || 0]; });
+          const expHeader = ['일자', '부서', '구분', '항목명', '금액', '사진첨부여부'];
+          const expRows = (state.receipts || []).map(function (r) {
+            return [r.date, r.dept, r.docType || '영수증', r.title, Number(r.amount) || 0, r.photo ? '첨부됨' : '없음'];
+          });
+          downloadExcelXml([
+            { name: '영수증지출내역', rows: [expHeader].concat(expRows) },
+            { name: '학생회비수입내역', rows: [incHeader].concat(incRows) }
+          ], 'KOPO_Ulsan_총학생회_영수증가계부.xls');
+        });
+
+        document.getElementById('exportCsvBtn').addEventListener('click', function () {
+          const rows = [['직책/부서', '담당자', '지표명', '현재실적', '목표치', '단위', '달성률(%)', '상태', '기한']];
+          (state.kpis || []).forEach(function (k) {
+            rows.push([k.dept, k.owner, k.title, k.current, k.target, k.unit, calcRate(k.current, k.target).toFixed(1), k.status, k.due || '']);
+          });
+          const csv = rows.map(function (r) {
+            return r.map(function (c) { return '"' + String(c).replace(/"/g, '""') + '"'; }).join(',');
+          }).join('\n');
+          const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'KOPO_Ulsan_KPI.csv';
+          a.click();
+        });
+
+        document.getElementById('resetDefaultDataBtn').addEventListener('click', function () {
+          if (!confirm('기본 KPI·공약 데이터로 초기화하시겠습니까?')) return;
+          const keepPins = state.pins;
+          const keepNotify = state.notifyConfig;
+          const keepChats = state.chats;
+          state = createDefaultState();
+          state.pins = keepPins;
+          state.notifyConfig = keepNotify;
+          state.chats = keepChats;
+          syncNow(null, false);
+        });
+
+        document.getElementById('backupJsonBtn').addEventListener('click', function () {
+          const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'KOPO_Ulsan_KPI_공유백업_' + new Date().toISOString().slice(0, 10) + '.json';
+          a.click();
+          showToast('공유 백업(.json) 파일이 다운로드되었습니다.');
+        });
+
+        document.getElementById('restoreJsonInput').addEventListener('change', function (e) {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = function () {
+            try {
+              const parsed = JSON.parse(reader.result);
+              if (parsed && Array.isArray(parsed.kpis)) {
+                state = Object.assign({}, createDefaultState(), parsed);
+                syncNow(null, false);
+                showToast('공유 백업 데이터가 복원되었습니다.');
+              }
+            } catch (err) {
+              showToast('백업 파일을 읽을 수 없습니다.', true);
+            }
+          };
+          reader.readAsText(file);
+          e.target.value = '';
+        });
+
+        document.getElementById('openPinModalBtn').addEventListener('click', function () {
+          document.getElementById('newPinInput').value = '';
+          document.getElementById('confirmPinInput').value = '';
+          document.getElementById('pinModal').classList.remove('hidden');
+        });
+        document.getElementById('closePinModalBtn').addEventListener('click', function () { document.getElementById('pinModal').classList.add('hidden'); });
+        document.getElementById('cancelPinModalBtn').addEventListener('click', function () { document.getElementById('pinModal').classList.add('hidden'); });
+        document.getElementById('savePinBtn').addEventListener('click', function () {
+          const p1 = document.getElementById('newPinInput').value.trim();
+          const p2 = document.getElementById('confirmPinInput').value.trim();
+          if (p1.length < 4) { showToast('비밀번호는 4자리 이상으로 입력해 주세요.', true); return; }
+          if (p1 !== p2) { showToast('비밀번호 확인이 일치하지 않습니다.', true); return; }
+          if (!state.pins) state.pins = { defaultPin: '2026', custom: {} };
+          if (!state.pins.custom) state.pins.custom = {};
+          if (currentUser) state.pins.custom[currentUser.id] = p1;
+          document.getElementById('pinModal').classList.add('hidden');
+          syncNow(null, false);
+        });
+      }
+
+      window.addEventListener('resize', function () {
+        if (!currentUser) return;
+        renderHeroKpiChart();
+        const analyticsTab = document.getElementById('tab-analytics');
+        if (analyticsTab && !analyticsTab.classList.contains('hidden')) {
+          renderAnalytics();
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', function () {
+        initSelectors();
+        initEvents();
+        initLogin();
+      });
+    })();
+  </script>
+</body>
+</html>
