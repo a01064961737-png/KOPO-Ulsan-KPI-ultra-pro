@@ -1,12 +1,9 @@
-const CACHE_NAME = 'kopo-ulsan-kpi-pwa-v8';
+const CACHE_NAME = 'kopo-ulsan-kpi-pwa-v8-simple';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/icon-192.png',
-  '/icon-512.png',
-  '/apple-touch-icon.png',
-  '/favicon.ico'
+  '/icon-512.png'
 ];
 
 self.addEventListener('install', (event) => {
@@ -35,10 +32,8 @@ self.addEventListener('fetch', (event) => {
   if (req.method !== 'GET') return;
 
   const url = new URL(req.url);
-  // 외부 도메인(Google Apps Script, Discord 등)은 절대 가로채지 않음
   if (url.origin !== self.location.origin) return;
 
-  // HTML/네비게이션 요청은 항상 네트워크 우선(최신 배포 즉시 반영), 오프라인 시 캐시 폴백
   if (req.mode === 'navigate' || url.pathname === '/' || url.pathname === '/index.html') {
     event.respondWith(
       fetch(req)
@@ -52,7 +47,6 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // 아이콘·매니페스트 등 정적 파일은 캐시 우선 + 백그라운드 갱신
   event.respondWith(
     caches.match(req).then((cached) => {
       const networkFetch = fetch(req)

@@ -9,9 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="KOPO KPI" />
   <link rel="manifest" href="/manifest.json" />
-  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
-  <link rel="icon" href="/favicon.ico" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/icon-512.png" />
+  <link rel="apple-touch-icon" sizes="512x512" href="/icon-512.png" />
   <title>KOPO-Ulsan KPI | 한국폴리텍 울산캠퍼스 총학생회 성과·정산 시스템</title>
   <style>
     :root {
@@ -62,7 +61,6 @@
     }
     .hidden { display: none !important; }
 
-    /* 카카오톡 인앱 브라우저 탈출 배너 */
     .kakao-warn-bar {
       position: relative;
       z-index: 40;
@@ -90,7 +88,6 @@
       cursor: pointer;
     }
 
-    /* 엠비언트 조명 배경 */
     .ambient-stage {
       position: fixed;
       inset: 0;
@@ -130,7 +127,6 @@
       box-shadow: 0 14px 36px rgba(2, 8, 23, 0.25), 0 0 28px var(--amb-glow);
     }
 
-    /* 로그인 화면 */
     .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .login-card { width: 100%; max-width: 440px; padding: 28px; }
     .login-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 12px; }
@@ -175,7 +171,6 @@
       font-size: 11px; color: #94A3B8; text-align: center; line-height: 1.5;
     }
 
-    /* 헤더 */
     .dash-wrap { min-height: 100vh; display: flex; flex-direction: column; }
     .top-header {
       position: sticky; top: 0; z-index: 30;
@@ -228,7 +223,6 @@
     .btn-danger:hover { background: #F43F5E; }
     .count-badge { background: #E11D48; color: #FFFFFF; border-radius: 999px; padding: 1px 6px; font-size: 11px; font-weight: 800; }
 
-    /* 서브 배너 */
     .sub-banner {
       background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(12px);
       border-bottom: 1px solid rgba(255, 255, 255, 0.14); padding: 9px 0; font-size: 12px; color: #E0F2FE;
@@ -236,7 +230,6 @@
     .sub-banner-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
     .link-btn { background: none; border: none; color: #FFFFFF; font-size: 12px; font-weight: 800; text-decoration: underline; cursor: pointer; padding: 0; }
 
-    /* 본문 */
     .main-body { flex: 1; padding: 22px 0 36px; }
     .stack-lg { display: flex; flex-direction: column; gap: 20px; }
     .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
@@ -247,7 +240,6 @@
     .stat-val.green { color: #059669; }
     .stat-sub { font-size: 11px; color: #94A3B8; margin-top: 4px; }
 
-    /* 히어로 KPI 그래프 섹션 */
     .hero-chart-card { padding: 22px; }
     .hero-chart-wrap {
       position: relative;
@@ -310,7 +302,6 @@
     .dept-btn-role { font-size: 12px; font-weight: 800; color: #0F172A; }
     .dept-btn-name { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-    /* 탭 바 */
     .tabs-bar { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px; }
     .tab-btn {
       background: transparent; border: none; border-radius: 12px; padding: 10px 14px;
@@ -322,7 +313,6 @@
       color: #FFFFFF; box-shadow: 0 6px 16px rgba(2, 132, 199, 0.3);
     }
 
-    /* 필터 & 테이블 */
     .toolbar-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 14px; }
     .filter-group { display: flex; flex-wrap: wrap; gap: 8px; }
     .table-wrap { overflow-x: auto; }
@@ -337,7 +327,6 @@
     .del-link { background: none; border: none; color: #E11D48; font-size: 12px; font-weight: 700; cursor: pointer; }
     .del-link:hover { text-decoration: underline; }
 
-    /* 폼 그리드 */
     .form-panel { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 16px; padding: 16px; margin-bottom: 16px; }
     .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
     .grid-6 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
@@ -345,7 +334,6 @@
     .span-3 { grid-column: span 3; }
     @media (max-width: 720px) { .span-2, .span-3 { grid-column: span 1; } }
 
-    /* 공약 카드 */
     .pledge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
     .pledge-item { background: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 14px; padding: 14px; }
     .pledge-top { display: flex; align-items: center; justify-content: space-between; font-size: 12px; font-weight: 800; color: var(--navy); }
@@ -354,7 +342,6 @@
     .range-row input[type="range"] { flex: 1; }
     .range-val { width: 44px; text-align: right; font-size: 12px; font-weight: 900; color: var(--navy); }
 
-    /* 가계부 & 카메라 */
     .ledger-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px; }
     .ledger-box { border-radius: 14px; padding: 14px 16px; border: 1px solid transparent; }
     .ledger-box.blue { background: #EFF6FF; border-color: #BFDBFE; }
@@ -380,193 +367,67 @@
       font-size: 11px; display: flex; align-items: center; justify-content: center;
     }
 
-    /* 임원 단톡방 (카톡 스타일) */
     .chat-shell {
-      display: flex;
-      flex-direction: column;
-      border-radius: 16px;
-      overflow: hidden;
-      border: 1px solid #CBD5E1;
-      background: #DCE8F2;
+      display: flex; flex-direction: column; border-radius: 16px; overflow: hidden;
+      border: 1px solid #CBD5E1; background: #DCE8F2;
     }
     .chat-topbar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 8px;
-      padding: 12px 16px;
-      background: linear-gradient(135deg, #1B365D 0%, #24477A 100%);
-      color: #FFFFFF;
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+      gap: 8px; padding: 12px 16px;
+      background: linear-gradient(135deg, #1B365D 0%, #24477A 100%); color: #FFFFFF;
     }
     .chat-topbar-title { font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .chat-live-pill {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 9px;
-      border-radius: 999px;
-      background: rgba(52, 211, 153, 0.22);
-      color: #A7F3D0;
-      border: 1px solid rgba(52, 211, 153, 0.45);
+      font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+      background: rgba(52, 211, 153, 0.22); color: #A7F3D0; border: 1px solid rgba(52, 211, 153, 0.45);
     }
     .chat-messages {
-      height: 430px;
-      overflow-y: auto;
-      padding: 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      background: linear-gradient(180deg, #C9DCF0 0%, #DAE8F5 100%);
+      height: 430px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column;
+      gap: 12px; background: linear-gradient(180deg, #C9DCF0 0%, #DAE8F5 100%);
     }
     .chat-empty {
-      margin: auto;
-      text-align: center;
-      color: #475569;
-      font-size: 13px;
-      background: rgba(255, 255, 255, 0.78);
-      padding: 16px 22px;
-      border-radius: 14px;
-      line-height: 1.5;
+      margin: auto; text-align: center; color: #475569; font-size: 13px;
+      background: rgba(255, 255, 255, 0.78); padding: 16px 22px; border-radius: 14px; line-height: 1.5;
     }
-    .chat-row {
-      display: flex;
-      align-items: flex-end;
-      gap: 8px;
-      max-width: 82%;
-    }
-    .chat-row.mine {
-      align-self: flex-end;
-      flex-direction: row-reverse;
-    }
-    .chat-row.other {
-      align-self: flex-start;
-    }
+    .chat-row { display: flex; align-items: flex-end; gap: 8px; max-width: 82%; }
+    .chat-row.mine { align-self: flex-end; flex-direction: row-reverse; }
+    .chat-row.other { align-self: flex-start; }
     .chat-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 12px;
-      background: #1B365D;
-      color: #FFFFFF;
-      font-size: 11px;
-      font-weight: 900;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.18);
+      width: 34px; height: 34px; border-radius: 12px; background: #1B365D; color: #FFFFFF;
+      font-size: 11px; font-weight: 900; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; box-shadow: 0 3px 8px rgba(15, 23, 42, 0.18);
     }
-    .chat-bubble-wrap {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
+    .chat-bubble-wrap { display: flex; flex-direction: column; gap: 4px; }
     .chat-row.mine .chat-bubble-wrap { align-items: flex-end; }
     .chat-row.other .chat-bubble-wrap { align-items: flex-start; }
-    .chat-sender {
-      font-size: 11px;
-      font-weight: 800;
-      color: #1E293B;
-      padding-left: 2px;
-    }
-    .chat-bubble-line {
-      display: flex;
-      align-items: flex-end;
-      gap: 6px;
-    }
+    .chat-sender { font-size: 11px; font-weight: 800; color: #1E293B; padding-left: 2px; }
+    .chat-bubble-line { display: flex; align-items: flex-end; gap: 6px; }
     .chat-row.mine .chat-bubble-line { flex-direction: row-reverse; }
     .chat-bubble {
-      padding: 10px 13px;
-      border-radius: 16px;
-      font-size: 13px;
-      line-height: 1.48;
-      white-space: pre-wrap;
-      word-break: break-word;
-      box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+      padding: 10px 13px; border-radius: 16px; font-size: 13px; line-height: 1.48;
+      white-space: pre-wrap; word-break: break-word; box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
     }
-    .chat-row.mine .chat-bubble {
-      background: #FEE500;
-      color: #191919;
-      border-top-right-radius: 4px;
-      font-weight: 600;
-    }
-    .chat-row.other .chat-bubble {
-      background: #FFFFFF;
-      color: #0F172A;
-      border-top-left-radius: 4px;
-    }
-    .chat-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      font-size: 10px;
-      color: #475569;
-      white-space: nowrap;
-    }
-    .chat-del-btn {
-      background: none;
-      border: none;
-      color: #94A3B8;
-      font-size: 10px;
-      cursor: pointer;
-      padding: 0;
-      text-align: right;
-    }
+    .chat-row.mine .chat-bubble { background: #FEE500; color: #191919; border-top-right-radius: 4px; font-weight: 600; }
+    .chat-row.other .chat-bubble { background: #FFFFFF; color: #0F172A; border-top-left-radius: 4px; }
+    .chat-meta { display: flex; flex-direction: column; gap: 2px; font-size: 10px; color: #475569; white-space: nowrap; }
+    .chat-del-btn { background: none; border: none; color: #94A3B8; font-size: 10px; cursor: pointer; padding: 0; text-align: right; }
     .chat-del-btn:hover { color: #E11D48; text-decoration: underline; }
-    .chat-input-area {
-      background: #FFFFFF;
-      border-top: 1px solid #CBD5E1;
-      padding: 12px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .chat-quick-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
+    .chat-input-area { background: #FFFFFF; border-top: 1px solid #CBD5E1; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+    .chat-quick-bar { display: flex; flex-wrap: wrap; gap: 6px; }
     .chat-quick-chip {
-      background: #F1F5F9;
-      border: 1px solid #E2E8F0;
-      border-radius: 999px;
-      padding: 4px 10px;
-      font-size: 11px;
-      font-weight: 700;
-      color: #334155;
-      cursor: pointer;
+      background: #F1F5F9; border: 1px solid #E2E8F0; border-radius: 999px;
+      padding: 4px 10px; font-size: 11px; font-weight: 700; color: #334155; cursor: pointer;
     }
     .chat-quick-chip:hover { background: #E0F2FE; border-color: #38BDF8; color: #0369A1; }
-    .chat-form-row {
-      display: flex;
-      gap: 8px;
-      align-items: stretch;
-    }
-    .chat-form-row input {
-      flex: 1;
-      padding: 11px 14px;
-      border: 1px solid #CBD5E1;
-      border-radius: 12px;
-      font-size: 13px;
-    }
-    .chat-form-row input:focus {
-      outline: none;
-      border-color: #0284C7;
-      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.16);
-    }
+    .chat-form-row { display: flex; gap: 8px; align-items: stretch; }
+    .chat-form-row input { flex: 1; padding: 11px 14px; border: 1px solid #CBD5E1; border-radius: 12px; font-size: 13px; }
+    .chat-form-row input:focus { outline: none; border-color: #0284C7; box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.16); }
     .chat-send-btn {
-      background: #FEE500;
-      color: #191919;
-      border: 1px solid #EAB308;
-      border-radius: 12px;
-      padding: 0 18px;
-      font-size: 13px;
-      font-weight: 900;
-      cursor: pointer;
-      white-space: nowrap;
+      background: #FEE500; color: #191919; border: 1px solid #EAB308; border-radius: 12px;
+      padding: 0 18px; font-size: 13px; font-weight: 900; cursor: pointer; white-space: nowrap;
     }
     .chat-send-btn:hover { background: #FACC15; }
 
-    /* 모달 & 토스트 */
     .modal-backdrop {
       position: fixed; inset: 0; z-index: 50; background: rgba(2, 8, 23, 0.7);
       display: flex; align-items: center; justify-content: center; padding: 16px;
@@ -587,20 +448,17 @@
 </head>
 <body data-ambient="ulsan-ocean">
 
-  <!-- 카카오톡 인앱 브라우저 감지 시 외부 브라우저 열기 안내 배너 -->
   <div id="kakaoWarnBar" class="kakao-warn-bar hidden">
     <span>💬 카카오톡 내부 브라우저에서는 앱 설치가 제한됩니다. Chrome 또는 Safari로 열어 설치하세요!</span>
     <button type="button" id="kakaoExternalBtn" class="kakao-open-btn">외부 브라우저로 열기</button>
   </div>
 
-  <!-- 엠비언트 배경 -->
   <div class="ambient-stage" aria-hidden="true">
     <div class="ambient-orb ambient-orb-1"></div>
     <div class="ambient-orb ambient-orb-2"></div>
     <div class="ambient-orb ambient-orb-3"></div>
   </div>
 
-  <!-- 임원 로그인 게이트 -->
   <div id="loginGate" class="content-layer login-wrap">
     <div class="glass-card login-card">
       <div class="login-top">
@@ -647,7 +505,6 @@
     </div>
   </div>
 
-  <!-- 메인 대시보드 -->
   <div id="dashboardApp" class="content-layer dash-wrap hidden">
     <header class="top-header">
       <div class="container header-inner">
@@ -707,7 +564,6 @@
     </div>
 
     <main class="container main-body stack-lg">
-      <!-- 요약 카드 4종 -->
       <section class="stats-grid">
         <div class="glass-card stat-card">
           <div class="stat-label">전체 등록 KPI</div>
@@ -731,7 +587,6 @@
         </div>
       </section>
 
-      <!-- 대시보드 메인 핵심: 실시간 KPI 달성률 그래프 -->
       <section class="glass-card hero-chart-card">
         <div class="sec-head" style="margin-bottom: 4px;">
           <div>
@@ -756,7 +611,6 @@
         <div id="heroDeptBadges" class="dept-mini-badges"></div>
       </section>
 
-      <!-- 메인 탭 네비게이션 -->
       <div class="glass-card tabs-bar">
         <button type="button" data-tab="kpi" class="tab-btn active">📋 부서별 KPI 관리대장</button>
         <button type="button" data-tab="chat" class="tab-btn">💬 임원 단톡방 <span id="tabChatBadge">(0)</span></button>
@@ -767,7 +621,6 @@
         <button type="button" data-tab="analytics" class="tab-btn">📊 부서별 달성률 차트·요약</button>
       </div>
 
-      <!-- 탭 1: KPI 관리대장 -->
       <section id="tab-kpi" class="tab-panel glass-card section-card">
         <div class="toolbar-row">
           <div class="filter-group">
@@ -807,7 +660,6 @@
         </div>
       </section>
 
-      <!-- 탭: 임원 단톡방 (카톡 스타일) -->
       <section id="tab-chat" class="tab-panel hidden glass-card section-card">
         <div class="chat-shell">
           <div class="chat-topbar">
@@ -838,7 +690,6 @@
         </div>
       </section>
 
-      <!-- 탭 2: 실시간 업무 공유 보드 -->
       <section id="tab-tasks" class="tab-panel hidden glass-card section-card">
         <div class="sec-head">
           <div>
@@ -867,7 +718,6 @@
         <div id="taskList"></div>
       </section>
 
-      <!-- 탭 3: 월별 실적 로그 -->
       <section id="tab-logs" class="tab-panel hidden glass-card section-card">
         <div class="sec-head">
           <div>
@@ -913,7 +763,6 @@
         </div>
       </section>
 
-      <!-- 탭 4: 학생회 공약 목표 -->
       <section id="tab-pledges" class="tab-panel hidden glass-card section-card">
         <div class="sec-head">
           <div>
@@ -949,7 +798,6 @@
         <div id="pledgeList" class="pledge-grid"></div>
       </section>
 
-      <!-- 탭 5: 영수증·명세표 증빙 + 카메라 촬영 + 수입/지출 정산 -->
       <section id="tab-receipts" class="tab-panel hidden glass-card section-card">
         <div class="sec-head">
           <div>
@@ -977,7 +825,6 @@
           </div>
         </div>
 
-        <!-- 학생회비 수입 등록 -->
         <form id="incomeForm" class="form-panel" style="background: #EFF6FF; border-color: #BFDBFE;">
           <div style="font-size: 12px; font-weight: 800; color: #1B365D; margin-bottom: 8px;">➕ 학생회비 입금 / 이월금(수입) 등록</div>
           <div class="grid-4">
@@ -990,7 +837,6 @@
           </div>
         </form>
 
-        <!-- 지출 영수증 촬영 및 등록 -->
         <div class="form-panel">
           <div class="cam-actions">
             <strong style="font-size: 12px; margin-right: 6px;">📷 영수증·거래명세표 촬영 및 첨부:</strong>
@@ -1041,7 +887,6 @@
         <div id="receiptsList"></div>
       </section>
 
-      <!-- 탭 6: 부서별 달성률 차트·요약 & 엑셀 내보내기 -->
       <section id="tab-analytics" class="tab-panel hidden glass-card section-card">
         <div class="sec-head">
           <div>
@@ -1076,7 +921,6 @@
     </main>
   </div>
 
-  <!-- 앱 설치 안내 모달 (iOS Safari / 크롬 메뉴 안내) -->
   <div id="pwaGuideModal" class="modal-backdrop hidden">
     <div class="glass-card modal-card">
       <div class="modal-head">
@@ -1090,7 +934,6 @@
     </div>
   </div>
 
-  <!-- 영수증 확대 모달 -->
   <div id="receiptLightbox" class="modal-backdrop hidden">
     <div class="glass-card modal-card">
       <div class="modal-head">
@@ -1101,7 +944,6 @@
     </div>
   </div>
 
-  <!-- 구글 시트 연동 모달 -->
   <div id="sheetModal" class="modal-backdrop hidden">
     <div class="glass-card modal-card">
       <div class="modal-head">
@@ -1124,7 +966,6 @@
     </div>
   </div>
 
-  <!-- 알림 & 디스코드 웹훅 모달 -->
   <div id="notifModal" class="modal-backdrop hidden">
     <div class="glass-card modal-card">
       <div class="modal-head">
@@ -1155,7 +996,6 @@
     </div>
   </div>
 
-  <!-- KPI 추가 모달 -->
   <div id="kpiModal" class="modal-backdrop hidden">
     <div class="glass-card modal-card">
       <div class="modal-head">
@@ -1208,7 +1048,6 @@
     </div>
   </div>
 
-  <!-- 비밀번호 변경 모달 -->
   <div id="pinModal" class="modal-backdrop hidden">
     <div class="glass-card modal-card">
       <div class="modal-head">
@@ -1264,14 +1103,12 @@
       }
 
       function initPwaSupport() {
-        // 1. 서비스 워커 등록 (크롬 정식 PWA 앱 설치 필수 조건)
         if ('serviceWorker' in navigator) {
           window.addEventListener('load', function () {
             navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {});
           });
         }
 
-        // 2. 카카오톡 인앱 브라우저 감지 및 외부 브라우저 열기 안내
         const ua = navigator.userAgent || '';
         const isKakao = /KAKAOTALK/i.test(ua);
         const isAndroid = /Android/i.test(ua);
@@ -1292,7 +1129,6 @@
           }
         }
 
-        // 이미 앱으로 설치되어 실행 중이면 설치 버튼 숨김
         if (isStandaloneMode()) {
           const b1 = document.getElementById('pwaInstallBtn');
           const b2 = document.getElementById('loginPwaInstallBtn');
@@ -1300,7 +1136,6 @@
           if (b2) b2.classList.add('hidden');
         }
 
-        // 3. 크롬/엣지/삼성인터넷 정식 설치 프롬프트 캡처
         window.addEventListener('beforeinstallprompt', function (e) {
           e.preventDefault();
           deferredInstallPrompt = e;
@@ -2424,7 +2259,6 @@
         document.getElementById('manualSyncBtn').addEventListener('click', function () { syncNow(null, false); });
         document.getElementById('roomCodeInput').addEventListener('change', function () { getRoomCode(); syncNow(null, false); });
 
-        // 단톡방 이벤트
         document.getElementById('chatRefreshBtn').addEventListener('click', function () {
           syncNow(null, false);
         });
