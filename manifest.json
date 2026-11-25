@@ -1,0 +1,39 @@
+{
+  "id": "/",
+  "name": "KOPO-Ulsan KPI | 총학생회 성과·정산",
+  "short_name": "KOPO KPI",
+  "description": "한국폴리텍 울산캠퍼스 총학생회 임원 전용 KPI 그래프·단톡방·영수증 정산 앱",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#091120",
+  "theme_color": "#1B365D",
+  "lang": "ko",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

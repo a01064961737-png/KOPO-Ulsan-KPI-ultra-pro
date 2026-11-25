@@ -3,8 +3,15 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#1B365D" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="KOPO KPI" />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="/icon-192.png" />
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
   <title>KOPO-Ulsan KPI | 한국폴리텍 울산캠퍼스 총학생회 성과·정산 시스템</title>
   <style>
     :root {
@@ -54,6 +61,34 @@
       overflow-x: hidden;
     }
     .hidden { display: none !important; }
+
+    /* 카카오톡 인앱 브라우저 탈출 배너 */
+    .kakao-warn-bar {
+      position: relative;
+      z-index: 40;
+      background: linear-gradient(90deg, #FEE500 0%, #FACC15 100%);
+      color: #191919;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 800;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+    .kakao-open-btn {
+      background: #191919;
+      color: #FEE500;
+      border: none;
+      border-radius: 999px;
+      padding: 5px 12px;
+      font-size: 11px;
+      font-weight: 900;
+      cursor: pointer;
+    }
 
     /* 엠비언트 조명 배경 */
     .ambient-stage {
@@ -129,6 +164,12 @@
       box-shadow: 0 8px 20px rgba(2, 132, 199, 0.28);
     }
     .btn-primary:hover { filter: brightness(1.06); }
+    .btn-install-login {
+      width: 100%; margin-top: 10px; padding: 10px 14px; border-radius: 12px;
+      border: 1px solid #A7F3D0; background: #ECFDF5; color: #065F46;
+      font-size: 13px; font-weight: 800; cursor: pointer;
+    }
+    .btn-install-login:hover { background: #D1FAE5; }
     .login-foot {
       margin-top: 18px; padding-top: 14px; border-top: 1px solid #F1F5F9;
       font-size: 11px; color: #94A3B8; text-align: center; line-height: 1.5;
@@ -179,6 +220,8 @@
     .btn-sky:hover { background: #7DD3FC; }
     .btn-mint { background: #34D399; color: #064E3B; border-color: transparent; font-weight: 800; }
     .btn-mint:hover { background: #6EE7B7; }
+    .btn-gold { background: #FDE047; color: #422006; border-color: transparent; font-weight: 900; }
+    .btn-gold:hover { background: #FEF08A; }
     .btn-white { background: #FFFFFF; color: #1B365D; border-color: transparent; font-weight: 800; }
     .btn-white:hover { background: #F0F9FF; }
     .btn-danger { background: #E11D48; color: #FFFFFF; border-color: transparent; }
@@ -544,6 +587,12 @@
 </head>
 <body data-ambient="ulsan-ocean">
 
+  <!-- 카카오톡 인앱 브라우저 감지 시 외부 브라우저 열기 안내 배너 -->
+  <div id="kakaoWarnBar" class="kakao-warn-bar hidden">
+    <span>💬 카카오톡 내부 브라우저에서는 앱 설치가 제한됩니다. Chrome 또는 Safari로 열어 설치하세요!</span>
+    <button type="button" id="kakaoExternalBtn" class="kakao-open-btn">외부 브라우저로 열기</button>
+  </div>
+
   <!-- 엠비언트 배경 -->
   <div class="ambient-stage" aria-hidden="true">
     <div class="ambient-orb ambient-orb-1"></div>
@@ -590,6 +639,7 @@
       <div id="loginErrorMsg" class="err-text"></div>
 
       <button type="button" id="loginSubmitBtn" class="btn-primary">KOPO-Ulsan KPI 대시보드 입장하기</button>
+      <button type="button" id="loginPwaInstallBtn" class="btn-install-login">📲 홈 화면에 앱으로 설치하기</button>
 
       <p class="login-foot">
         본 시스템은 2026.11.12 업무분장표에 등록된 총학생회 회장단·대의원장 및 7개 부서장만 접근할 수 있습니다.
@@ -625,6 +675,7 @@
             <input id="roomCodeInput" type="text" value="kopo-ulsan-2026" class="room-input" />
           </div>
 
+          <button type="button" id="pwaInstallBtn" class="btn-sm btn-gold">📲 앱 설치</button>
           <button type="button" id="openSheetModalBtn" class="btn-sm btn-sky">구글 시트 연동</button>
           <button type="button" id="manualSyncBtn" class="btn-sm btn-mint">즉시 동기화</button>
           <button type="button" id="openNotifModalBtn" class="btn-sm">
@@ -646,7 +697,7 @@
     <div class="sub-banner">
       <div class="container sub-banner-inner">
         <div>
-          <strong>📊 실시간 KPI 그래프 · 💬 임원 단톡방 · 🔔 디스코드 알림:</strong> 단톡방 대화와 KPI·영수증 변경이 자동 동기화되며, 연결된 <strong>디스코드 웹훅</strong>으로 임원 휴대폰 알림이 발송됩니다.
+          <strong>📊 실시간 KPI 그래프 · 💬 임원 단톡방 · 🔔 디스코드 알림 · 📲 PWA 앱 설치:</strong> 크롬/사파리에서 홈 화면에 독립 앱으로 설치해 주소창 없이 빠르게 사용하세요.
         </div>
         <div class="action-bar">
           <button type="button" id="bannerNotifBtn" class="link-btn">🔔 디스코드 웹훅 설정</button>
@@ -1025,6 +1076,20 @@
     </main>
   </div>
 
+  <!-- 앱 설치 안내 모달 (iOS Safari / 크롬 메뉴 안내) -->
+  <div id="pwaGuideModal" class="modal-backdrop hidden">
+    <div class="glass-card modal-card">
+      <div class="modal-head">
+        <h3 class="modal-title">📲 KOPO-Ulsan KPI 앱 설치 방법</h3>
+        <button type="button" id="closePwaGuideBtn" class="modal-close">&times;</button>
+      </div>
+      <div id="pwaGuideBody" class="info-box" style="font-size: 13px; line-height: 1.65;"></div>
+      <div class="modal-foot">
+        <button type="button" id="closePwaGuideBtn2" class="btn-navy">확인</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 영수증 확대 모달 -->
   <div id="receiptLightbox" class="modal-backdrop hidden">
     <div class="glass-card modal-card">
@@ -1192,6 +1257,116 @@
         { id: 'service', role: '봉사부장', name: '정호준', dept: '봉사부', major: '에너지산업설비과' }
       ];
 
+      let deferredInstallPrompt = null;
+
+      function isStandaloneMode() {
+        return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      }
+
+      function initPwaSupport() {
+        // 1. 서비스 워커 등록 (크롬 정식 PWA 앱 설치 필수 조건)
+        if ('serviceWorker' in navigator) {
+          window.addEventListener('load', function () {
+            navigator.serviceWorker.register('/sw.js', { scope: '/' }).catch(function () {});
+          });
+        }
+
+        // 2. 카카오톡 인앱 브라우저 감지 및 외부 브라우저 열기 안내
+        const ua = navigator.userAgent || '';
+        const isKakao = /KAKAOTALK/i.test(ua);
+        const isAndroid = /Android/i.test(ua);
+        const isIos = /iPhone|iPad|iPod/i.test(ua);
+        const warnBar = document.getElementById('kakaoWarnBar');
+        const extBtn = document.getElementById('kakaoExternalBtn');
+        if (isKakao && warnBar) {
+          warnBar.classList.remove('hidden');
+          if (extBtn) {
+            extBtn.addEventListener('click', function () {
+              const targetUrl = location.href;
+              if (isAndroid) {
+                location.href = 'intent://' + targetUrl.replace(/^https?:\/\//i, '') + '#Intent;scheme=https;package=com.android.chrome;end';
+              } else {
+                location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(targetUrl);
+              }
+            });
+          }
+        }
+
+        // 이미 앱으로 설치되어 실행 중이면 설치 버튼 숨김
+        if (isStandaloneMode()) {
+          const b1 = document.getElementById('pwaInstallBtn');
+          const b2 = document.getElementById('loginPwaInstallBtn');
+          if (b1) b1.classList.add('hidden');
+          if (b2) b2.classList.add('hidden');
+        }
+
+        // 3. 크롬/엣지/삼성인터넷 정식 설치 프롬프트 캡처
+        window.addEventListener('beforeinstallprompt', function (e) {
+          e.preventDefault();
+          deferredInstallPrompt = e;
+          const b1 = document.getElementById('pwaInstallBtn');
+          const b2 = document.getElementById('loginPwaInstallBtn');
+          if (b1) { b1.classList.remove('hidden'); b1.textContent = '📲 앱 바로 설치'; }
+          if (b2) { b2.classList.remove('hidden'); b2.textContent = '📲 홈 화면에 앱 바로 설치하기'; }
+        });
+
+        window.addEventListener('appinstalled', function () {
+          deferredInstallPrompt = null;
+          const b1 = document.getElementById('pwaInstallBtn');
+          const b2 = document.getElementById('loginPwaInstallBtn');
+          if (b1) b1.classList.add('hidden');
+          if (b2) b2.classList.add('hidden');
+          showToast('🎉 앱 설치 완료! 휴대폰 홈 화면에서 바로 실행하세요.');
+        });
+
+        function handleInstallClick() {
+          if (deferredInstallPrompt) {
+            deferredInstallPrompt.prompt();
+            deferredInstallPrompt.userChoice.then(function (res) {
+              if (res && res.outcome === 'accepted') {
+                deferredInstallPrompt = null;
+              }
+            });
+            return;
+          }
+
+          const body = document.getElementById('pwaGuideBody');
+          const modal = document.getElementById('pwaGuideModal');
+          if (!body || !modal) return;
+
+          if (isKakao) {
+            body.innerHTML =
+              '<strong>카카오톡 내부 브라우저</strong>에서는 앱 설치가 차단됩니다.<br><br>' +
+              '1. 화면 우측 하단(또는 우측 상단) <strong>점 3개(⋮)</strong>를 누르세요.<br>' +
+              '2. <strong>다른 브라우저로 열기</strong> → <strong>Chrome(안드로이드)</strong> 또는 <strong>Safari(아이폰)</strong>를 선택하세요.<br>' +
+              '3. 열린 화면에서 다시 <strong>📲 앱 설치</strong> 버튼을 누르면 즉시 설치됩니다.';
+          } else if (isIos) {
+            body.innerHTML =
+              '<strong>아이폰(iOS) 앱 설치 방법 (Safari 필수):</strong><br><br>' +
+              '1. Safari 화면 하단 중앙의 <strong>공유 버튼(네모 위로 화살표 ⬆️)</strong>을 누르세요.<br>' +
+              '2. 아래로 스크롤해 <strong>홈 화면에 추가</strong>를 선택하세요.<br>' +
+              '3. 우측 상단 <strong>추가</strong>를 누르면 주소창 없는 독립 앱으로 설치됩니다.';
+          } else {
+            body.innerHTML =
+              '<strong>안드로이드 / PC 크롬 앱 설치 방법:</strong><br><br>' +
+              '1. 크롬 우측 상단 <strong>점 3개(⋮)</strong> 메뉴(또는 주소창 우측 설치 아이콘)를 누르세요.<br>' +
+              '2. <strong>홈 화면에 추가</strong> → <strong>앱 설치</strong>를 선택하세요.<br>' +
+              '3. 만약 방금 새로 배포했다면 페이지를 1회 새로고침한 뒤 다시 눌러 주세요.';
+          }
+          modal.classList.remove('hidden');
+        }
+
+        const btnDash = document.getElementById('pwaInstallBtn');
+        const btnLogin = document.getElementById('loginPwaInstallBtn');
+        if (btnDash) btnDash.addEventListener('click', handleInstallClick);
+        if (btnLogin) btnLogin.addEventListener('click', handleInstallClick);
+
+        const c1 = document.getElementById('closePwaGuideBtn');
+        const c2 = document.getElementById('closePwaGuideBtn2');
+        if (c1) c1.addEventListener('click', function () { document.getElementById('pwaGuideModal').classList.add('hidden'); });
+        if (c2) c2.addEventListener('click', function () { document.getElementById('pwaGuideModal').classList.add('hidden'); });
+      }
+
       function escapeHtml(str) {
         return String(str == null ? '' : str)
           .replace(/&/g, '&amp;')
@@ -1345,7 +1520,7 @@
         if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA' || active.tagName === 'SELECT')) {
           return true;
         }
-        const modalIds = ['receiptLightbox', 'sheetModal', 'notifModal', 'kpiModal', 'pinModal'];
+        const modalIds = ['pwaGuideModal', 'receiptLightbox', 'sheetModal', 'notifModal', 'kpiModal', 'pinModal'];
         for (let i = 0; i < modalIds.length; i++) {
           const el = document.getElementById(modalIds[i]);
           if (el && !el.classList.contains('hidden')) return true;
@@ -2709,6 +2884,7 @@
       });
 
       document.addEventListener('DOMContentLoaded', function () {
+        initPwaSupport();
         initSelectors();
         initEvents();
         initLogin();
